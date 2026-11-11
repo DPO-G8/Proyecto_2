@@ -213,7 +213,7 @@ public class PruebaClub {
         debeRechazar("beto con cafe reciente no entra a padel", () -> club.getGestorVentas().verificarAcceso(beto, 1));
         debeFuncionar("beto con cafe si entra a una cancha de tenis", () -> club.getGestorVentas().verificarAcceso(beto, 3));
 
-        // ------------------------------------------------------------------- inventario
+     // ------------------------------------------------------------------- inventario
         System.out.println("\n== Inventario");
         debeRechazar("un socio no consulta inventario", () -> club.getGestorInventario().consultarProducto(ana, 1));
         debeFuncionar("admin consulta un producto", () -> club.getGestorInventario().consultarProducto(admin, 1));
@@ -223,8 +223,10 @@ public class PruebaClub {
                 ((Articulo) club.getGestorVentas().getProductos().get(1)).getCantidadDisponible() == 11);
         debeRechazar("empleado propone snack sin precio", () -> club.getGestorInventario().proponerProducto(emp,
                 new Snack(club.getGestorInventario().siguienteIdProducto(), "Galleta", 0, new ArrayList<String>())));
+        ArrayList<String> ninguno = new ArrayList<String>();
+        ninguno.add("ninguno");
         final Sugerencia sugerencia = club.getGestorInventario().proponerProducto(fisio, new Snack(
-                club.getGestorInventario().siguienteIdProducto(), "Galleta de avena", 2500, new ArrayList<String>()));
+                club.getGestorInventario().siguienteIdProducto(), "Galleta de avena", 2500, ninguno));
         verificar("hay una sugerencia pendiente", club.getGestorInventario().sugerenciasPendientes(admin).size() == 1);
         debeFuncionar("admin aprueba la sugerencia", () -> club.getGestorInventario().resolverSugerencia(admin, sugerencia, true));
         verificar("la galleta ya esta en el catalogo", club.getGestorVentas().getProductos().containsKey(5));

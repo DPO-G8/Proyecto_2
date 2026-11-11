@@ -637,10 +637,11 @@ public class Consola {
         Club club = preparar("Empleado RF2 - Proponer productos");
         Usuario emp = usuario(club, "empleado1");
         Usuario admin = usuario(club, "admin");
+        ArrayList<String> ninguno = new ArrayList<String>();
+        ninguno.add("ninguno");
         estado("sugerencias pendientes: " + club.getGestorInventario().sugerenciasPendientes(admin).size());
         exito("empleado1 propone una galleta de avena", () -> club.getGestorInventario().proponerProducto(emp,
-                new Snack(club.getGestorInventario().siguienteIdProducto(), "Galleta de avena", 2500,
-                        new ArrayList<String>())));
+                new Snack(club.getGestorInventario().siguienteIdProducto(), "Galleta de avena", 2500, ninguno)));
         estado("sugerencias pendientes: " + club.getGestorInventario().sugerenciasPendientes(admin).size());
         rechazo("proponer un snack sin precio", () -> club.getGestorInventario().proponerProducto(emp, new Snack(
                 club.getGestorInventario().siguienteIdProducto(), "Galleta", 0, new ArrayList<String>())));
@@ -696,8 +697,10 @@ public class Consola {
     private static void administradorRF2() throws Exception {
         Club club = preparar("Administrador RF2 - Aprobar o rechazar sugerencias");
         Usuario admin = usuario(club, "admin");
+        ArrayList<String> ninguno = new ArrayList<String>();
+        ninguno.add("ninguno");
         Sugerencia galleta = club.getGestorInventario().proponerProducto(usuario(club, "empleado1"), new Snack(
-                club.getGestorInventario().siguienteIdProducto(), "Galleta de avena", 2500, new ArrayList<String>()));
+                club.getGestorInventario().siguienteIdProducto(), "Galleta de avena", 2500, ninguno));
         Sugerencia jugo = club.getGestorInventario().proponerProducto(usuario(club, "fisio1"), new Bebida(
                 club.getGestorInventario().siguienteIdProducto(), "Jugo verde", 6000, false));
         estado("productos en catalogo: " + club.getGestorVentas().getProductos().size());

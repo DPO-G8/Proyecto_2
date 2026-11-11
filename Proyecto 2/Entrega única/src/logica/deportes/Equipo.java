@@ -5,7 +5,7 @@ import java.util.List;
 
 import logica.Texto;
 import logica.usuarios.Socio;
-
+import java.util.HashSet;
 public class Equipo {
     private String nombre;
     private String categoria;
@@ -88,7 +88,13 @@ public class Equipo {
     }
 
     public void alinearJugadores(Partido partido, List<Socio> jugadores) throws Exception {
-        if (jugadores.size() < this.deporte.getMinimoJugadores()) {
+        HashSet<Socio> vistos = new HashSet<>();
+        for (Socio jugador : jugadores) {
+            if (!vistos.add(jugador)) {
+                throw new Exception(jugador.getLogin() + " esta repetido en la alineacion");
+            }
+        }
+    	if (jugadores.size() < this.deporte.getMinimoJugadores()) {
             throw new Exception("Se alinearon " + jugadores.size() + " jugadores y " + this.deporte.getNombre()
                     + " exige minimo " + this.deporte.getMinimoJugadores());
         }
@@ -100,7 +106,7 @@ public class Equipo {
                 throw new Exception(jugador.getLogin() + " esta suspendido hasta " + jugador.getFechaFinSuspension());
             }
             if (!partido.puedeAlinear(jugador)) {
-                throw new Exception(jugador.getLogin() + " no esta en la nomina inscrita para este partido");
+                throw new Exception(jugador.getLogin() + " no esta habilitado para el torneo");
             }
         }
         partido.registroAlineacion(jugadores);

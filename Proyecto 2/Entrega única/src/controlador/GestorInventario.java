@@ -89,8 +89,8 @@ public class GestorInventario {
         if (producto.getPrecio() <= 0) {
             throw new Exception("El producto necesita un precio positivo");
         }
-        if (producto instanceof Snack && ((Snack) producto).getAlergenos() == null) {
-            throw new Exception("Un snack debe registrar sus alergenos");
+        if (producto instanceof Snack && ((Snack) producto).getAlergenos().isEmpty()) {
+            throw new Exception("Un snack debe declarar sus alergenos (o ninguno si no tiene)");
         }
         if (producto instanceof Articulo && ((Articulo) producto).getCategoria().trim().isEmpty()) {
             throw new Exception("Un articulo necesita categoria");
@@ -124,8 +124,12 @@ public class GestorInventario {
     public void resolverSugerencia(Usuario quien, Sugerencia sugerencia, boolean aprobar) throws Exception {
         exigirAdministrador(quien);
         if (aprobar) {
+        	Producto producto = sugerencia.getProducto();
+            if (producto instanceof Snack && ((Snack) producto).getAlergenos().isEmpty()) {
+                throw new Exception("No se puede aprobar: el snack debe declarar sus alergenos (o 'ninguno' si no tiene)");
+            }
             sugerencia.aprobar();
-            gestorVentas.agregarProducto(sugerencia.getProducto());
+            gestorVentas.agregarProducto(producto);
             ((Administrador) quien).agregarSugerenciaAprobada(sugerencia);
         } else {
             sugerencia.rechazar();

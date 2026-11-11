@@ -5,7 +5,7 @@
       "producto": 1,
       "cantidad": 2
     }],
-    "fecha": "2026-11-10T19:09:11.239028",
+    "fecha": "2026-11-10T20:28:59.358097400",
     "tipo": "TIENDA",
     "comprador": "ana",
     "puntosRedimidos": 0
@@ -16,7 +16,7 @@
       "producto": 3,
       "cantidad": 1
     }],
-    "fecha": "2026-11-10T19:09:11.252391800",
+    "fecha": "2026-11-10T20:28:59.370728900",
     "tipo": "CAFETERIA",
     "comprador": "ana",
     "propina": 0.1,
@@ -28,7 +28,7 @@
       "producto": 1,
       "cantidad": 1
     }],
-    "fecha": "2026-11-10T19:09:11.255393400",
+    "fecha": "2026-11-10T20:28:59.375858300",
     "tipo": "TIENDA",
     "comprador": "ana",
     "puntosRedimidos": 1000
@@ -39,7 +39,7 @@
       "producto": 4,
       "cantidad": 1
     }],
-    "fecha": "2026-11-10T19:09:11.261764600",
+    "fecha": "2026-11-10T20:28:59.390469200",
     "tipo": "CAFETERIA",
     "comprador": "ana",
     "propina": 0.1,
@@ -51,7 +51,7 @@
       "producto": 1,
       "cantidad": 1
     }],
-    "fecha": "2026-11-10T19:09:11.264806",
+    "fecha": "2026-11-10T20:28:59.397837500",
     "tipo": "TIENDA",
     "comprador": "empleado1",
     "puntosRedimidos": 0
@@ -62,7 +62,7 @@
       "producto": 3,
       "cantidad": 1
     }],
-    "fecha": "2026-11-10T19:09:11.271390500",
+    "fecha": "2026-11-10T20:28:59.408228100",
     "tipo": "CAFETERIA",
     "comprador": "cami",
     "propina": 0.1,
@@ -74,7 +74,7 @@
       "producto": 2,
       "cantidad": 1
     }],
-    "fecha": "2026-11-10T19:09:11.275009400",
+    "fecha": "2026-11-10T20:28:59.414410100",
     "tipo": "CAFETERIA",
     "comprador": "beto",
     "propina": 0.1,

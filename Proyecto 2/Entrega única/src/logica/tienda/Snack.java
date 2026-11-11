@@ -8,7 +8,11 @@ public class Snack extends Producto {
 
     public Snack(int idProducto, String nombre, double precio, List<String> alergenos) {
         super(idProducto, nombre, precio);
-        this.alergenos = new ArrayList<String>(alergenos);
+        if (alergenos == null) {
+            this.alergenos = new ArrayList<String>();
+        } else {
+            this.alergenos = new ArrayList<String>(alergenos);
+        }
     }
 
     public List<String> getAlergenos() {

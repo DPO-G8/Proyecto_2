@@ -55,7 +55,7 @@ public class GestorReservas {
                     + " jugadores en la modalidad " + modalidad);
         }
         if (estaOcupada(instalacion, fecha, horaInicio, horaFin)) {
-            throw new Exception("La instalacion '" + instalacion.getNombre() + "' ya esta reservada en ese horario");
+            throw new Exception("No hay disponibilidad: La instalacion '" + instalacion.getNombre() + "' ya esta reservada en ese horario");
         }
 
         // R17: maximo de instalaciones de la disciplina usadas al mismo tiempo
@@ -66,7 +66,7 @@ public class GestorReservas {
             }
         }
         if (enUso + 1 > disciplina.getMaxInstalacionesSimultaneas()) {
-            throw new Exception("La disciplina " + disciplina.getNombre() + " ya usa el maximo de "
+            throw new Exception("No hay disponibilidad: La disciplina " + disciplina.getNombre() + " ya usa el maximo de "
                     + disciplina.getMaxInstalacionesSimultaneas() + " instalaciones en ese horario");
         }
 

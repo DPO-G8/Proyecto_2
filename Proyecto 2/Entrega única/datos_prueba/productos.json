@@ -32,7 +32,7 @@
   {
     "precio": 2500,
     "tipo": "SNACK",
-    "alergenos": [],
+    "alergenos": ["ninguno"],
     "id": 5,
     "nombre": "Galleta de avena"
   }
