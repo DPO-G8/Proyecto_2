@@ -1,0 +1,22 @@
+[
+  {
+    "deporte": "Futbol",
+    "entidad": "Universidades de Bogota",
+    "temporada": "2026",
+    "categoria": "Mayores",
+    "formato": "Liga",
+    "inscripciones": [],
+    "nominaMinima": 7,
+    "nombre": "Torneo de los Cerros"
+  },
+  {
+    "deporte": "Futbol",
+    "entidad": "ASCUN",
+    "temporada": "2026",
+    "categoria": "Mayores",
+    "formato": "Fases",
+    "inscripciones": [],
+    "nominaMinima": 7,
+    "nombre": "ASCUN"
+  }
+]

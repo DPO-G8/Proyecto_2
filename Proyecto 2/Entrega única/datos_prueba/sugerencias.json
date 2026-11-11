@@ -1,0 +1,12 @@
+[{
+  "estado": "APROBADA",
+  "empleado": "fisio1",
+  "aprobadaPor": "admin",
+  "producto": {
+    "precio": 2500,
+    "tipo": "SNACK",
+    "alergenos": [],
+    "id": 5,
+    "nombre": "Galleta de avena"
+  }
+}]

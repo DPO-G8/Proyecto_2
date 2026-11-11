@@ -1,0 +1,23 @@
+[
+  {
+    "horaFin": "12:00",
+    "empleado": "entrenador1",
+    "dia": "Lunes",
+    "horaInicio": "08:00",
+    "solicitudes": []
+  },
+  {
+    "horaFin": "12:00",
+    "empleado": "entrenador2",
+    "dia": "Lunes",
+    "horaInicio": "08:00",
+    "solicitudes": []
+  },
+  {
+    "horaFin": "12:00",
+    "empleado": "empleado1",
+    "dia": "Martes",
+    "horaInicio": "08:00",
+    "solicitudes": []
+  }
+]

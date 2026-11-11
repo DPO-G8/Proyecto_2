@@ -1,0 +1,59 @@
+[
+  {
+    "minimoJugadores": 7,
+    "nombre": "Futbol",
+    "equipos": [{
+      "cupoMaximo": 15,
+      "entrenador": "entrenador1",
+      "plantilla": [
+        {
+          "posicion": "Delantero",
+          "socio": "jugador1",
+          "camiseta": 1
+        },
+        {
+          "posicion": "Delantero",
+          "socio": "jugador2",
+          "camiseta": 2
+        },
+        {
+          "posicion": "Delantero",
+          "socio": "jugador3",
+          "camiseta": 3
+        },
+        {
+          "posicion": "Delantero",
+          "socio": "jugador4",
+          "camiseta": 4
+        },
+        {
+          "posicion": "Delantero",
+          "socio": "jugador5",
+          "camiseta": 5
+        },
+        {
+          "posicion": "Delantero",
+          "socio": "jugador6",
+          "camiseta": 6
+        },
+        {
+          "posicion": "Delantero",
+          "socio": "jugador7",
+          "camiseta": 7
+        },
+        {
+          "posicion": "Delantero",
+          "socio": "jugador8",
+          "camiseta": 8
+        }
+      ],
+      "categoria": "Mayores",
+      "nombre": "Leones"
+    }]
+  },
+  {
+    "minimoJugadores": 5,
+    "nombre": "Baloncesto",
+    "equipos": []
+  }
+]

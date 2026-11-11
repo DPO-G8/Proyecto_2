@@ -1,0 +1,36 @@
+[
+  {
+    "lineas": [{
+      "precioUnitario": 100000,
+      "producto": 1,
+      "cantidad": 1
+    }],
+    "fecha": "2026-11-04T11:56:21.693061300",
+    "tipo": "TIENDA",
+    "comprador": "ana",
+    "puntosRedimidos": 0
+  },
+  {
+    "lineas": [{
+      "precioUnitario": 100000,
+      "producto": 1,
+      "cantidad": 1
+    }],
+    "fecha": "2026-10-30T11:56:21.697059400",
+    "tipo": "TIENDA",
+    "comprador": "beto",
+    "puntosRedimidos": 0
+  },
+  {
+    "lineas": [{
+      "precioUnitario": 4000,
+      "producto": 3,
+      "cantidad": 1
+    }],
+    "fecha": "2026-10-15T11:56:21.697059400",
+    "tipo": "CAFETERIA",
+    "comprador": "cami",
+    "propina": 0.1,
+    "puntosRedimidos": 0
+  }
+]

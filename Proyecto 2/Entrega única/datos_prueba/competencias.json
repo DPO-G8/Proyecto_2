@@ -1,0 +1,34 @@
+[
+  {
+    "deporte": "Futbol",
+    "entidad": "Universidades de Bogota",
+    "temporada": "2026",
+    "categoria": "Mayores",
+    "formato": "Liga",
+    "inscripciones": [{
+      "nomina": [
+        "jugador1",
+        "jugador2",
+        "jugador3",
+        "jugador4",
+        "jugador5",
+        "jugador6",
+        "jugador7",
+        "jugador8"
+      ],
+      "equipo": "Leones"
+    }],
+    "nominaMinima": 7,
+    "nombre": "Torneo de los Cerros"
+  },
+  {
+    "deporte": "Futbol",
+    "entidad": "ASCUN",
+    "temporada": "2026",
+    "categoria": "Mayores",
+    "formato": "Fases",
+    "inscripciones": [],
+    "nominaMinima": 7,
+    "nombre": "ASCUN"
+  }
+]

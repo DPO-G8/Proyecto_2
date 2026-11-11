@@ -1,0 +1,57 @@
+[
+  {
+    "maxInstalacionesSimultaneas": 2,
+    "inscripciones": [
+      {
+        "puntajeRanking": 1000,
+        "socio": "ana",
+        "nivel": "Principiante"
+      },
+      {
+        "puntajeRanking": 1000,
+        "socio": "cami",
+        "nivel": "Intermedio"
+      },
+      {
+        "puntajeRanking": 1000,
+        "socio": "beto",
+        "nivel": "Avanzado"
+      }
+    ],
+    "instalaciones": [{
+      "reservas": [],
+      "techada": false,
+      "id": 1,
+      "nombre": "Cancha Padel 1",
+      "capacidad": 4,
+      "tipoCancha": "Padel"
+    }],
+    "nombre": "Padel"
+  },
+  {
+    "maxInstalacionesSimultaneas": 1,
+    "inscripciones": [],
+    "instalaciones": [{
+      "reservas": [],
+      "techada": true,
+      "id": 2,
+      "nombre": "Mesa 1",
+      "capacidad": 4,
+      "tipoCancha": "Mesa"
+    }],
+    "nombre": "Tenis de mesa"
+  },
+  {
+    "maxInstalacionesSimultaneas": 2,
+    "inscripciones": [],
+    "instalaciones": [{
+      "reservas": [],
+      "techada": false,
+      "id": 3,
+      "nombre": "Cancha Tenis 1",
+      "capacidad": 4,
+      "tipoCancha": "Tenis"
+    }],
+    "nombre": "Tenis"
+  }
+]

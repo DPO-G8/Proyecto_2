@@ -1,0 +1,75 @@
+[
+  {
+    "fecha": "2026-11-10",
+    "alineados": [],
+    "estadisticas": [],
+    "tipo": "PRACTICA",
+    "modalidad": "Sencillos",
+    "disciplina": "Padel",
+    "jugadores": [
+      "ana",
+      "cami"
+    ],
+    "marcador": ""
+  },
+  {
+    "fecha": "2026-11-10",
+    "alineados": [],
+    "estadisticas": [],
+    "tipo": "PRACTICA",
+    "modalidad": "Sencillos",
+    "disciplina": "Padel",
+    "jugadores": ["ana"],
+    "rival": "entrenador1",
+    "marcador": ""
+  },
+  {
+    "escenario": "Estadio Norte",
+    "fecha": "2026-11-10",
+    "alineados": [
+      "jugador1",
+      "jugador2",
+      "jugador3",
+      "jugador4",
+      "jugador5",
+      "jugador6",
+      "jugador7"
+    ],
+    "estadisticas": [
+      {
+        "tipo": "FUTBOL",
+        "amarillas": 0,
+        "socio": "jugador1",
+        "rojas": 1,
+        "goles": 1,
+        "asistencias": 0
+      },
+      {
+        "tipo": "FUTBOL",
+        "amarillas": 1,
+        "socio": "jugador2",
+        "rojas": 0,
+        "goles": 0,
+        "asistencias": 0
+      }
+    ],
+    "tipo": "COMPETENCIA",
+    "fase": "Jornada 1",
+    "equipo": "Leones",
+    "institucionRival": "Universidad X",
+    "marcador": "2-1",
+    "competencia": "Torneo de los Cerros"
+  },
+  {
+    "escenario": "Estadio Sur",
+    "fecha": "2026-11-11",
+    "alineados": [],
+    "estadisticas": [],
+    "tipo": "COMPETENCIA",
+    "fase": "Jornada 2",
+    "equipo": "Leones",
+    "institucionRival": "Universidad Y",
+    "marcador": "1-1",
+    "competencia": "Torneo de los Cerros"
+  }
+]

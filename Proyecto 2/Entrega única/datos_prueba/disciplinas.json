@@ -1,0 +1,76 @@
+[
+  {
+    "maxInstalacionesSimultaneas": 2,
+    "inscripciones": [
+      {
+        "puntajeRanking": 1000,
+        "socio": "cami",
+        "nivel": "Intermedio"
+      },
+      {
+        "puntajeRanking": 1000,
+        "socio": "ana",
+        "nivel": "Principiante"
+      },
+      {
+        "puntajeRanking": 1000,
+        "socio": "beto",
+        "nivel": "Avanzado"
+      }
+    ],
+    "instalaciones": [{
+      "reservas": [
+        {
+          "horaFin": "11:00",
+          "fecha": "2026-11-11",
+          "socio": "ana",
+          "modalidad": "Dobles",
+          "cantidadJugadores": 4,
+          "invitados": [],
+          "horaInicio": "10:00"
+        },
+        {
+          "horaFin": "19:49:11.266807",
+          "fecha": "2026-11-10",
+          "socio": "cami",
+          "modalidad": "Dobles",
+          "cantidadJugadores": 4,
+          "invitados": [],
+          "horaInicio": "19:19:11.266807"
+        }
+      ],
+      "techada": false,
+      "id": 1,
+      "nombre": "Cancha Padel 1",
+      "capacidad": 4,
+      "tipoCancha": "Padel"
+    }],
+    "nombre": "Padel"
+  },
+  {
+    "maxInstalacionesSimultaneas": 1,
+    "inscripciones": [],
+    "instalaciones": [{
+      "reservas": [],
+      "techada": true,
+      "id": 2,
+      "nombre": "Mesa 1",
+      "capacidad": 4,
+      "tipoCancha": "Mesa"
+    }],
+    "nombre": "Tenis de mesa"
+  },
+  {
+    "maxInstalacionesSimultaneas": 2,
+    "inscripciones": [],
+    "instalaciones": [{
+      "reservas": [],
+      "techada": false,
+      "id": 3,
+      "nombre": "Cancha Tenis 1",
+      "capacidad": 4,
+      "tipoCancha": "Tenis"
+    }],
+    "nombre": "Tenis"
+  }
+]

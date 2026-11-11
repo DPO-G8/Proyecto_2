@@ -1,0 +1,15 @@
+[{
+  "fecha": "2026-11-11",
+  "tipo": "Tecnico",
+  "entrenador": "entrenador1",
+  "hora": "17:00",
+  "equipo": "Leones",
+  "duracion": 90,
+  "instalacion": 3,
+  "asistencias": [{
+    "estado": "ASISTIO",
+    "socio": "jugador1",
+    "comentario": "Muy bien",
+    "nota": 5
+  }]
+}]

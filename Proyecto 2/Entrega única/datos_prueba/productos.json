@@ -1,0 +1,39 @@
+[
+  {
+    "precio": 100000,
+    "tipo": "ARTICULO",
+    "ubicacion": "Estante A",
+    "categoria": "Raquetas",
+    "id": 1,
+    "nombre": "Raqueta",
+    "cantidadDisponible": 11
+  },
+  {
+    "precio": 5000,
+    "tipo": "BEBIDA",
+    "caliente": true,
+    "id": 2,
+    "nombre": "Cafe"
+  },
+  {
+    "precio": 4000,
+    "tipo": "BEBIDA",
+    "caliente": false,
+    "id": 3,
+    "nombre": "Limonada"
+  },
+  {
+    "precio": 3000,
+    "tipo": "SNACK",
+    "alergenos": ["mani"],
+    "id": 4,
+    "nombre": "Barra de mani"
+  },
+  {
+    "precio": 2500,
+    "tipo": "SNACK",
+    "alergenos": [],
+    "id": 5,
+    "nombre": "Galleta de avena"
+  }
+]

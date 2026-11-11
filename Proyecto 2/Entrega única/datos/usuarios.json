@@ -1,0 +1,120 @@
+[
+  {
+    "password": "1234",
+    "tipo": "ADMINISTRADOR",
+    "login": "admin",
+    "puntos": 0
+  },
+  {
+    "password": "1",
+    "tipo": "ENTRENADOR",
+    "codigoDescuento": "COD-E1",
+    "login": "entrenador1",
+    "puntos": 0
+  },
+  {
+    "password": "1",
+    "tipo": "ENTRENADOR",
+    "codigoDescuento": "COD-E2",
+    "login": "entrenador2",
+    "puntos": 0
+  },
+  {
+    "password": "1",
+    "tipo": "ENTRENADOR",
+    "codigoDescuento": "COD-E3",
+    "login": "entrenador3",
+    "puntos": 0
+  },
+  {
+    "password": "1",
+    "tipo": "FISIOTERAPEUTA",
+    "codigoDescuento": "COD-F1",
+    "login": "fisio1",
+    "puntos": 0
+  },
+  {
+    "password": "1",
+    "tipo": "EMPLEADO",
+    "codigoDescuento": "COD-M1",
+    "login": "empleado1",
+    "puntos": 0
+  },
+  {
+    "password": "123",
+    "tipo": "SOCIO",
+    "login": "ana",
+    "puntos": 2380,
+    "edad": 20
+  },
+  {
+    "password": "123",
+    "tipo": "SOCIO",
+    "login": "beto",
+    "puntos": 2380,
+    "edad": 25
+  },
+  {
+    "password": "123",
+    "tipo": "SOCIO",
+    "login": "cami",
+    "puntos": 94,
+    "edad": 30
+  },
+  {
+    "password": "1",
+    "tipo": "SOCIO",
+    "login": "jugador1",
+    "puntos": 0,
+    "edad": 22
+  },
+  {
+    "password": "1",
+    "tipo": "SOCIO",
+    "login": "jugador2",
+    "puntos": 0,
+    "edad": 22
+  },
+  {
+    "password": "1",
+    "tipo": "SOCIO",
+    "login": "jugador3",
+    "puntos": 0,
+    "edad": 22
+  },
+  {
+    "password": "1",
+    "tipo": "SOCIO",
+    "login": "jugador4",
+    "puntos": 0,
+    "edad": 22
+  },
+  {
+    "password": "1",
+    "tipo": "SOCIO",
+    "login": "jugador5",
+    "puntos": 0,
+    "edad": 22
+  },
+  {
+    "password": "1",
+    "tipo": "SOCIO",
+    "login": "jugador6",
+    "puntos": 0,
+    "edad": 22
+  },
+  {
+    "password": "1",
+    "tipo": "SOCIO",
+    "login": "jugador7",
+    "puntos": 0,
+    "edad": 22
+  },
+  {
+    "password": "1",
+    "tipo": "SOCIO",
+    "login": "jugador8",
+    "puntos": 0,
+    "edad": 22
+  }
+]
