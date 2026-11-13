@@ -15,12 +15,24 @@ public class Encuentro {
 		this.jugado = false;
 	}
 
+	public int getNumero() {
+		return numero;
+	}
+
 	public InscripcionTorneo getParticipanteA() {
 		return participanteA;
 	}
 
 	public InscripcionTorneo getParticipanteB() {
 		return participanteB;
+	}
+
+	public int getMarcadorA() {
+		return marcadorA;
+	}
+
+	public int getMarcadorB() {
+		return marcadorB;
 	}
 
 	public boolean isJugado() {

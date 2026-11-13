@@ -13,6 +13,7 @@ public class Equipo {
     private DeporteConjunto deporte;
     private List<InscripcionEquipo> plantilla;
     private List<InscripcionCompetencia> inscripcionesCompetencia;
+    private int puntosCompetencia;
 
     public Equipo(String nombre, String categoria, int cupoMaximo, DeporteConjunto deporte) {
         this.nombre = nombre;
@@ -25,6 +26,14 @@ public class Equipo {
 
     public String getNombre() {
         return this.nombre;
+    }
+
+    public int getPuntosCompetencia() {
+        return this.puntosCompetencia;
+    }
+
+    public void sumarPuntosCompetencia(int puntos) {
+        this.puntosCompetencia += puntos;
     }
 
     public String getCategoria() {
@@ -132,9 +141,5 @@ public class Equipo {
             }
         }
         return false;
-    }
-    
-    public void sumarPuntosCompetencia(int puntos) {
-    	throw new UnsupportedOperationException();
     }
 }

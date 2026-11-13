@@ -18,7 +18,21 @@ public class TorneoIndividual extends Torneo {
 		return disciplina;
 	}
 
+	@Override
+	public String getNombre() {
+		return super.getNombre() + (esDobles() ? " Dobles" : " Sencillos");
+	}
+
+	public String getModalidad() {
+		return modalidad;
+	}
+
 	public boolean esDobles() {
 		return DOBLES.equals(modalidad);
+	}
+
+	@Override
+	public boolean admiteEmpate() {
+		return false;
 	}
 }

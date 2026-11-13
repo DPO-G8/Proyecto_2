@@ -16,6 +16,18 @@ public class PersonaExterna {
 		this.codigo = codigo;
 	}
 
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
 	public String getDocumento() {
 		return documento;
 	}

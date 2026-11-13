@@ -47,6 +47,32 @@ public abstract class Torneo {
 		return categoriaONivel;
 	}
 
+	public String getNombre() {
+		return getNombreDeporte() + " " + categoriaONivel;
+	}
+
+	public String getEstadoTexto() {
+		if (EN_CURSO.equals(estado)) {
+			return "En curso";
+		}
+		if (FINALIZADO.equals(estado)) {
+			return "Finalizado";
+		}
+		return "Abierto a inscripciones";
+	}
+
+	public int cuposLibres() {
+		return cuposTotales - cuposOcupados();
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public LocalDate getFecha() {
+		return fecha;
+	}
+
 	public double getTarifa() {
 		return tarifa;
 	}
@@ -64,6 +90,8 @@ public abstract class Torneo {
 	}
 
 	public abstract String getNombreDeporte();
+
+	public abstract boolean admiteEmpate();
 
 	public int getCuposTotales() {
 		return cuposTotales;
@@ -101,7 +129,7 @@ public abstract class Torneo {
 		return getCuposRegulares() - ocupados;
 	}
 
-		public boolean asignarCupo(boolean entreLosMejores) throws Exception {
+	public boolean asignarCupo(boolean entreLosMejores) throws Exception {
 		if (entreLosMejores && cuposPreferencialesLibres() > 0) {
 			return true;
 		}
@@ -145,6 +173,10 @@ public abstract class Torneo {
 
 	public List<Encuentro> getEncuentros() {
 		return encuentros;
+	}
+
+	public void agregarEncuentro(Encuentro encuentro) {
+		encuentros.add(encuentro);
 	}
 
 	public void generarEncuentros() {

@@ -30,6 +30,7 @@ public class DisciplinaIndividual {
 
     public void agregarInscripcion(InscripcionDisciplina inscripcion) {
         this.inscripciones.add(inscripcion);
+        inscripcion.getSocio().agregarInscripcionDisciplina(this.nombre, inscripcion);
     }
 
     public List<Instalacion> getInstalaciones() {

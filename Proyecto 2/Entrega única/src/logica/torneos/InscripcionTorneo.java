@@ -1,12 +1,18 @@
 package logica.torneos;
-import java.util.List;
-import logica.usuarios.Socio;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import logica.deportes.Equipo;
+import logica.deportes.InscripcionEquipo;
+import logica.usuarios.Empleado;
+import logica.usuarios.Socio;
 
 public class InscripcionTorneo {
 	private List<Socio> socios;
 	private PersonaExterna externo;
+	private Equipo equipo;
+	private Empleado empleado;
 	private boolean preferencial;
 	private double tarifaPagada;
 	private int puntos;
@@ -30,9 +36,73 @@ public class InscripcionTorneo {
 		this.tarifaPagada = tarifaPagada;
 	}
 
+	public InscripcionTorneo(Equipo equipo, boolean preferencial, double tarifaPagada) {
+		this.socios = new ArrayList<Socio>();
+		this.equipo = equipo;
+		this.preferencial = preferencial;
+		this.tarifaPagada = tarifaPagada;
+	}
+
+	public InscripcionTorneo(Empleado empleado, boolean preferencial) {
+		this.socios = new ArrayList<Socio>();
+		this.empleado = empleado;
+		this.preferencial = preferencial;
+		this.tarifaPagada = 0;
+	}
+
+	public PersonaExterna getExterno() {
+		return externo;
+	}
+
+	public Equipo getEquipo() {
+		return equipo;
+	}
+
+	public Empleado getEmpleado() {
+		return empleado;
+	}
+
+	public String getNombre() {
+		if (externo != null) {
+			return externo.getNombre() + " (" + externo.getTipo().toLowerCase() + ")";
+		}
+		if (equipo != null) {
+			return equipo.getNombre();
+		}
+		if (empleado != null) {
+			return empleado.getLogin();
+		}
+		String nombre = socios.get(0).getLogin();
+		if (socios.size() > 1) {
+			nombre += " / " + socios.get(1).getLogin();
+		}
+		return nombre;
+	}
+
+	public boolean esEmpleado() {
+		return empleado != null;
+	}
+
+	public List<Socio> getJugadores() {
+		if (equipo == null) {
+			return socios;
+		}
+		List<Socio> plantilla = new ArrayList<Socio>();
+		for (InscripcionEquipo i : equipo.getPlantilla()) {
+			plantilla.add(i.getSocio());
+		}
+		return plantilla;
+	}
+
 	public boolean incluye(String loginODocumento) {
 		if (externo != null) {
 			return externo.getDocumento().equals(loginODocumento);
+		}
+		if (equipo != null) {
+			return equipo.getNombre().equals(loginODocumento);
+		}
+		if (empleado != null) {
+			return empleado.getLogin().equals(loginODocumento);
 		}
 		for (Socio s : socios) {
 			if (s.getLogin().equals(loginODocumento)) {
@@ -64,11 +134,5 @@ public class InscripcionTorneo {
 
 	public void setPremio(double premio) {
 		this.premio = premio;
-	}
-	public List<Socio> getJugadores(){
-		return socios;
-	}
-	public boolean esEmpleado() {
-		throw new UnsupportedOperationException();
 	}
 }
