@@ -19,6 +19,7 @@ import logica.usuarios.Administrador;
 import logica.usuarios.Bono;
 import logica.usuarios.Socio;
 import logica.usuarios.Usuario;
+import logica.deportes.Equipo;
 
 public class GestorTorneos {
 	public static final int MINIMO_PARTICIPANTES = 2;
@@ -197,4 +198,15 @@ public class GestorTorneos {
 	private boolean vacio(String s) {
 		return s == null || s.trim().isEmpty();
 	}
+	public InscripcionTorneo inscribirEquipo(Usuario quien, Torneo t, Equipo equipo)throws Exception {
+		throw new UnsupportedOperationException();
+	}
+	public InscripcionTorneo retirarEquipo(Usuario quien, Torneo t, Equipo equipo)throws Exception {
+	
+		throw new UnsupportedOperationException();
+	}
+	public void registrarEquipo(Equipo equipo){
+		throw new UnsupportedOperationException();
+	}
+	
 }

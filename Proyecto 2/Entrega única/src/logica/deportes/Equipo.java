@@ -133,4 +133,8 @@ public class Equipo {
         }
         return false;
     }
+    
+    public void sumarPuntosCompetencia(int puntos) {
+    	throw new UnsupportedOperationException();
+    }
 }
