@@ -26,4 +26,8 @@ public class GestorTorneos {
 	public void finalizar(Usuario quien, Torneo t) throws Exception {
 		throw new UnsupportedOperationException();
 	}
+	public void retirarExterno(Usuario quien, Torneo t, String documento) throws Exception {
+		throw new UnsupportedOperationException();
+	}
+	
 }
