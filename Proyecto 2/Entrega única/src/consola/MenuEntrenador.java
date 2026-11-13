@@ -12,6 +12,7 @@ import logica.deportes.Equipo;
 import logica.deportes.Estadistica;
 import logica.deportes.Partido;
 import logica.deportes.PartidoCompetencia;
+import logica.deportes.PartidoPractica;
 import logica.deportes.SesionEntrenamiento;
 import logica.torneos.Encuentro;
 import logica.torneos.Torneo;
@@ -56,15 +57,6 @@ public class MenuEntrenador {
                             e.getNombre());
                     System.out.println("  Sesion creada.");
                 })
-                .opcion("Crear sesion de academia (individual o grupo pequeno)", () -> {
-                    DisciplinaIndividual d = entrada.elegir("Disciplina:", club.getGestorReservas().getDisciplinas(),
-                            x -> x.getNombre());
-                    club.getGestorEntrenamientos().crearSesionAcademia(entrenador, entrada.fecha("Fecha"),
-                            entrada.hora("Hora"), entrada.entero("Duracion en minutos", 1, 600),
-                            entrada.texto("Tipo"), entrada.entero("Id de la instalacion", 1, 9999), d.getNombre(),
-                            entrada.lista("Logins de los convocados"));
-                    System.out.println("  Sesion creada.");
-                })
                 .opcion("Registrar asistencia y nota", () -> {
                     List<SesionEntrenamiento> mias = new ArrayList<SesionEntrenamiento>();
                     for (SesionEntrenamiento s : club.getGestorEntrenamientos().getSesiones()) {
@@ -99,18 +91,6 @@ public class MenuEntrenador {
                             entrada.texto("Escenario"), entrada.texto("Fase"));
                     System.out.println("  Partido programado.");
                 })
-                .opcion("Consultar jugadores disponibles para una fecha", () -> {
-                    Equipo e = elegirEquipo();
-                    LocalDate fecha = entrada.fecha("Fecha del partido");
-                    Map<String, String> no = club.getGestorCompetencias().noDisponibles(entrenador, e.getNombre(), fecha);
-                    for (Map.Entry<String, String> x : no.entrySet()) {
-                        System.out.println("  No disponible: " + x.getKey() + " (" + x.getValue() + ")");
-                    }
-                    boolean puede = club.getGestorCompetencias().puedeJugarse(entrenador, e.getNombre(), fecha);
-                    System.out.println("  " + (e.getPlantilla().size() - no.size()) + " habilitados; "
-                            + e.getDeporte().getNombre() + " exige " + e.getDeporte().getMinimoJugadores() + ": "
-                            + (puede ? "el partido puede jugarse" : "el partido NO puede jugarse"));
-                })
                 .opcion("Convocar alineacion para un partido de competencia", () -> {
                     PartidoCompetencia p = elegirPartidoCompetencia(true);
                     club.getGestorCompetencias().convocar(entrenador, p, entrada.lista("Logins de los jugadores"));
@@ -121,6 +101,27 @@ public class MenuEntrenador {
                     club.getGestorCompetencias().registrarResultado(entrenador, p, entrada.entero("Marcador a favor", 0, 999),
                             entrada.entero("Marcador en contra", 0, 999));
                     System.out.println("  Resultado registrado.");
+                })
+                .opcion("Registrar resultado de un partido de practica (como rival)", () -> {
+                    List<PartidoPractica> mios = new ArrayList<PartidoPractica>();
+                    for (Partido p : club.getGestorCompetencias().getPartidos()) {
+                        if (p instanceof PartidoPractica && p.getMarcador().isEmpty()
+                                && ((PartidoPractica) p).getRival() == entrenador) {
+                            mios.add((PartidoPractica) p);
+                        }
+                    }
+                    PartidoPractica p = entrada.elegir("Partidos de practica pendientes:", mios, MainEmpleado::partido);
+                    String ladoB = MainSocio.logins(p.getLadoB());
+                    System.out.println("  Lado A: " + MainSocio.logins(p.getLadoA()) + " | Lado B: "
+                            + (ladoB.isEmpty() ? "" : ladoB + " y ") + "usted (entrenador)");
+                    int marcadorA = entrada.entero("Marcador del lado A", 0, 999);
+                    int marcadorB = entrada.entero("Marcador del lado B", 0, 999);
+                    club.getGestorCompetencias().registrarResultadoPractica(entrenador, p, marcadorA, marcadorB);
+                    for (Estadistica e : FormularioEstadisticas.pedir(entrada, club.getGestorUsuarios().getUsuarios(), p,
+                            p.getDisciplina().getNombre())) {
+                        club.getGestorCompetencias().registrarEstadistica(entrenador, p, e);
+                    }
+                    System.out.println("  Resultado registrado y ranking actualizado.");
                 })
                 .opcion("Registrar estadisticas de un partido", () -> {
                     PartidoCompetencia p = elegirPartidoCompetencia(false);
@@ -137,12 +138,6 @@ public class MenuEntrenador {
                                 + x.getClass().getSimpleName().replace("Estadistica", "") + " en "
                                 + MainEmpleado.partido(x.getPartido()));
                     }
-                })
-                .opcion("Programar partido interno", () -> {
-                    Equipo e = elegirEquipo();
-                    club.getGestorCompetencias().crearPartidoInterno(entrenador, e.getNombre(),
-                            entrada.texto("Equipo rival del club"), entrada.fecha("Fecha"));
-                    System.out.println("  Partido interno programado.");
                 })
                 .mostrar();
     }
@@ -165,29 +160,15 @@ public class MenuEntrenador {
                 .opcion("Inscribir mi equipo", () -> {
                     Equipo e = elegirEquipo();
                     Torneo t = VistaTorneos.elegir(club, entrenador, entrada);
-                    boolean pref = club.getGestorTorneos().inscribirEquipo(entrenador, t, e.getNombre())
+                    boolean pref = club.getGestorTorneos().inscribirEquipo(entrenador, t, e)
                             .isPreferencial();
                     System.out.println("  Equipo inscrito con cupo " + (pref ? "preferencial" : "regular"));
                 })
                 .opcion("Retirar mi equipo", () -> {
                     Equipo e = elegirEquipo();
                     Torneo t = VistaTorneos.elegir(club, entrenador, entrada);
-                    club.getGestorTorneos().retirarEquipo(entrenador, t, e.getNombre());
+                    club.getGestorTorneos().retirarEquipo(entrenador, t, e);
                     System.out.println("  Equipo retirado; el cupo queda libre.");
-                })
-                .opcion("Presentar alineacion para un encuentro", () -> {
-                    Equipo e = elegirEquipo();
-                    Torneo t = VistaTorneos.elegir(club, entrenador, entrada);
-                    List<Encuentro> suyos = new ArrayList<Encuentro>();
-                    for (Encuentro p : t.getEncuentrosPendientes()) {
-                        if ((p.getParticipanteA().incluye(e.getNombre()) || p.getParticipanteB().incluye(e.getNombre()))) {
-                            suyos.add(p);
-                        }
-                    }
-                    Encuentro p = entrada.elegir("Encuentros pendientes:", suyos, VistaTorneos::encuentro);
-                    club.getGestorTorneos().alinear(entrenador, t, p, e.getNombre(),
-                            entrada.lista("Logins de los jugadores"));
-                    System.out.println("  Alineacion registrada.");
                 })
                 .mostrar();
     }

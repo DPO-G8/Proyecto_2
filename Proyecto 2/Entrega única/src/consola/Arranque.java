@@ -2,9 +2,10 @@ package consola;
 
 import controlador.Club;
 import logica.usuarios.Usuario;
+import persistencia.RepositorioJSON;
 
 public class Arranque{
-    public static final String CARPETA_DATOS = 'datos';
+    public static final String CARPETA_DATOS = "datos";
 
    
     public interface Aplicacion{
@@ -13,7 +14,7 @@ public class Arranque{
     public static void iniciar(String nombreRol, Login.Rol rol, Aplicacion aplicacion){
         Club club;
         try{
-            club = new Club();
+            club = new Club(new RepositorioJSON(CARPETA_DATOS));
         } catch (Exception e){
             System.out.println("No se pudieron cargar los datos de la carpeta ' " + CARPETA_DATOS + "': " + e.getMessage());
              return;
@@ -28,14 +29,8 @@ public class Arranque{
             aplicacion.correr(new Sesion(club, usuario, entrada));
         } catch (Entrada.FinEntrada e){
             System.out.println();
-        } finally {
-            try {
-                club.guardarTodo();
-                System.out.println("Cambios guardados. Hasta luego.");
-            } catch ( Exception e) {
-                System.out.println("Error al guardar: " + e.getMessage());
-            }
         }
+        System.out.println("Cambios guardados. Hasta luego.");
     }
 
 }

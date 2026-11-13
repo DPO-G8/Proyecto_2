@@ -1,7 +1,6 @@
 package consola;
 
 import java.util.List;
-import java.util.Map;
 
 import controlador.Club;
 import controlador.GestorTorneos;
@@ -78,7 +77,7 @@ public class VistaTorneos {
                 List<InscripcionTorneo> clasificacion = t.getClasificacion();
                 for (int i = 0; i < clasificacion.size() && i < GestorTorneos.PREMIO_BONO.length; i++) {
                     String socios = "";
-                    for (Socio s : clasificacion.get(i).getSocios()) {
+                    for (Socio s : clasificacion.get(i).getJugadores()) {
                         socios += (socios.isEmpty() ? "" : ", ") + s.getLogin();
                     }
                     System.out.println("    " + (i + 1) + ". " + clasificacion.get(i).getNombre() + ": "
@@ -87,28 +86,19 @@ public class VistaTorneos {
                 }
             }
         }
-        Map<String, String> lideres = club.getGestorTorneos().lideresEstadisticas(t);
-        if (!lideres.isEmpty()) {
-            System.out.println("  Lideres de estadisticas:");
-            for (Map.Entry<String, String> e : lideres.entrySet()) {
-                System.out.println("    " + e.getKey() + ": " + e.getValue());
-            }
-        }
     }
 
     public static String encuentro(Encuentro p) {
-        String resultado = p.isJugado() ? p.getMarcador() + (p.getEscenario().isEmpty() ? "" : " (" + p.getEscenario() + ")")
-                : "pendiente";
-        return "#" + p.getId() + " " + p.getParticipanteA().getNombre() + " vs " + p.getParticipanteB().getNombre()
+        String resultado = p.isJugado() ? p.getMarcadorA() + "-" + p.getMarcadorB() : "pendiente";
+        return "#" + p.getNumero() + " " + p.getParticipanteA().getNombre() + " vs " + p.getParticipanteB().getNombre()
                 + ": " + resultado;
     }
 
     private static void tabla(String titulo, List<InscripcionTorneo> filas) {
-        System.out.println("  " + titulo + " (Pts, PJ, Dif):");
+        System.out.println("  " + titulo + " (puntos):");
         int puesto = 1;
         for (InscripcionTorneo f : filas) {
-            System.out.println("    " + puesto++ + ". " + f.getNombre() + "  " + f.getPuntos() + "  " + f.getJugados()
-                    + "  " + f.getDiferencia());
+            System.out.println("    " + puesto++ + ". " + f.getNombre() + "  " + f.getPuntos());
         }
     }
 

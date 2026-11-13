@@ -18,7 +18,7 @@ import logica.tienda.Bebida;
 import logica.tienda.Producto;
 import logica.tienda.Snack;
 import logica.tienda.Venta;
-import logica.torneos.Bono;
+import logica.usuarios.Bono;
 import logica.torneos.Torneo;
 import logica.usuarios.Socio;
 
@@ -64,12 +64,8 @@ public class MainSocio {
                     Instalacion i = elegirInstalacion();
                     String modalidad = entrada.elegirTexto("Modalidad:", Instalacion.SENCILLOS, Instalacion.DOBLES);
                     int jugadores = entrada.entero("Cantidad de jugadores", 1, 4);
-                    List<String> invitados = new ArrayList<String>();
-                    if (jugadores > 1 && entrada.siNo("Indicar socios invitados")) {
-                        invitados = entrada.lista("Logins de los invitados");
-                    }
                     Reserva r = club.getGestorReservas().reservar(socio, i.getId(), entrada.fecha("Fecha"),
-                            entrada.hora("Hora de inicio"), entrada.hora("Hora de fin"), jugadores, modalidad, invitados);
+                            entrada.hora("Hora de inicio"), entrada.hora("Hora de fin"), jugadores, modalidad);
                     System.out.println("  Reserva registrada en " + i.getNombre() + " el " + r.getFecha());
                 })
                 .opcion("Mis reservas", () -> {
@@ -78,11 +74,6 @@ public class MainSocio {
                                 + r.getModalidad() + ", " + r.getCantidadJugadores() + " jugadores) de "
                                 + r.getSocio().getLogin());
                     }
-                })
-                .opcion("Entrar a una instalacion (control de bebida caliente)", () -> {
-                    Instalacion i = elegirInstalacion();
-                    club.getGestorVentas().verificarAcceso(socio, i.getId());
-                    System.out.println("  Acceso permitido a " + i.getNombre());
                 })
                 .mostrar();
     }
@@ -115,7 +106,7 @@ public class MainSocio {
                             x -> x.getNombre());
                     String modalidad = entrada.elegirTexto("Modalidad:", Instalacion.SENCILLOS, Instalacion.DOBLES);
                     club.getGestorCompetencias().crearPartidoPractica(socio, d.getNombre(), modalidad,
-                            entrada.fecha("Fecha"), entrada.lista("Logins de los demas jugadores"));
+                            entrada.fecha("Fecha"), entrada.lista("Logins de los demas jugadores (en dobles, primero tu pareja)"));
                     System.out.println("  Partido de practica programado.");
                 })
                 .opcion("Registrar resultado de un partido de practica", () -> {
@@ -127,11 +118,15 @@ public class MainSocio {
                         }
                     }
                     PartidoPractica p = entrada.elegir("Partidos pendientes:", mios, x -> MainEmpleado.partido(x));
-                    String marcador = entrada.texto("Marcador (por ejemplo 6-4 6-3)");
-                    List<String> ganadores = entrada.lista("Login(s) de los ganadores");
-                    club.getGestorCompetencias().registrarResultadoPractica(socio, p, marcador, ganadores,
-                            FormularioEstadisticas.pedir(entrada, club.getGestorUsuarios().getUsuarios(), p,
-                                    p.getDisciplina().getNombre()));
+                    System.out.println("  Lado A: " + logins(p.getLadoA()) + " | Lado B: " + logins(p.getLadoB())
+                            + (p.getRival() != null ? " y el entrenador " + p.getRival().getLogin() : ""));
+                    int marcadorA = entrada.entero("Marcador del lado A", 0, 999);
+                    int marcadorB = entrada.entero("Marcador del lado B", 0, 999);
+                    club.getGestorCompetencias().registrarResultadoPractica(socio, p, marcadorA, marcadorB);
+                    for (Estadistica e : FormularioEstadisticas.pedir(entrada, club.getGestorUsuarios().getUsuarios(), p,
+                            p.getDisciplina().getNombre())) {
+                        club.getGestorCompetencias().registrarEstadistica(socio, p, e);
+                    }
                     System.out.println("  Resultado registrado y ranking actualizado.");
                 })
                 .mostrar();
@@ -139,7 +134,7 @@ public class MainSocio {
     private void menuTienda() {
         new Menu("Tienda y cafeteria", entrada)
                 .opcion("Ver catalogo", () -> {
-                    for (Producto p : club.getGestorVentas().catalogo()) {
+                    for (Producto p : new ArrayList<Producto>(club.getGestorVentas().getProductos().values())) {
                         System.out.println("  " + producto(p));
                     }
                 })
@@ -152,7 +147,7 @@ public class MainSocio {
         Map<Integer, Integer> pedido = new LinkedHashMap<Integer, Integer>();
         boolean cafeteria = false;
         do {
-            Producto p = entrada.elegir("Producto:", club.getGestorVentas().catalogo(), MainSocio::producto);
+            Producto p = entrada.elegir("Producto:", new ArrayList<Producto>(club.getGestorVentas().getProductos().values()), MainSocio::producto);
             if (p instanceof Snack) {
                 System.out.println("  Aviso de alergenos: " + ((Snack) p).getAlergenos());
             }
@@ -170,7 +165,8 @@ public class MainSocio {
                 disponibles.add(b);
             }
         }
-        if (!disponibles.isEmpty() && entrada.siNo("Usar un bono de torneo (no acumulable)")) {
+        if (!disponibles.isEmpty() && socio.getPorcentajeDescuento() == 0
+                && entrada.siNo("Usar un bono de torneo (no acumulable)")) {
             bono = entrada.elegir("Bonos disponibles:", disponibles, MainSocio::bono);
         }
         int puntos = 0;
@@ -178,19 +174,30 @@ public class MainSocio {
                 + socio.getPuntosFidelidad() + ")")) {
             puntos = entrada.entero("Puntos a redimir", 1, socio.getPuntosFidelidad());
         }
-        Venta v = club.getGestorVentas().comprar(socio, pedido, propina, puntos, bono);
+        Venta v = club.getGestorVentas().comprar(socio, pedido, propina, puntos);
+        if (bono != null) {
+            club.getGestorVentas().redimirBono(socio, bono, v);
+        }
         System.out.println("  Compra registrada. Total: " + VistaTorneos.dinero(v.calcularTotal())
                 + " | Puntos ahora: " + socio.getPuntosFidelidad());
     }
 
     private void mostrarBonos() throws Exception {
-        List<Bono> bonos = club.getGestorTorneos().consultarBonos(socio);
+        List<Bono> bonos = socio.getBonos();
         if (bonos.isEmpty()) {
             System.out.println("  Bonos: ninguno");
         }
         for (Bono b : bonos) {
             System.out.println("  Bono: " + bono(b));
         }
+    }
+
+    static String logins(List<Socio> socios) {
+        String texto = "";
+        for (Socio s : socios) {
+            texto += (texto.isEmpty() ? "" : ", ") + s.getLogin();
+        }
+        return texto;
     }
 
     private void desempeno() {
@@ -247,6 +254,6 @@ public class MainSocio {
     }
 
     static String bono(Bono b) {
-        return (int) Math.round(b.getPorcentaje() * 100) + "% (" + b.getNombreTorneo() + ") - " + b.getEstado();
+        return (int) Math.round(b.getPorcentaje() * 100) + "% - " + (b.isUsado() ? "usado" : "disponible");
     }
 }

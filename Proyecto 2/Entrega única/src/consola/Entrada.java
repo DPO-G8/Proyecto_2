@@ -25,7 +25,7 @@ public class Entrada{
     }
 
     public String textoOpcional(String pregunta) {
-        return linea(pregunta + "Enter para omitir");
+        return linea(pregunta + " (Enter para omitir)");
     }
 
     public int entero(String pregunta, int minimo, int maximo) {
@@ -36,7 +36,7 @@ public class Entrada{
                 if(valor >= minimo && valor <= maximo) {
                     return valor;
                 }
-                System.out.println("Debe estar entre" + minimo + "y ", maximo+".");
+                System.out.println("  Debe estar entre " + minimo + " y " + maximo + ".");
 
             } catch (NumberFormatException e) {
                 System.out.println(" Escriba un numero");
@@ -64,11 +64,11 @@ public class Entrada{
             try{
                 return LocalDate.parse(linea(pregunta + " (AAAA-MM-DD)"));
             } catch (DateTimeParseException e) {
-                System.out.println(" Fecha invalida. Ejemplo; 2026-12-05");
+                System.out.println(" Fecha invalida. Ejemplo: 2026-12-05");
             }
         }
     }
-    public LocalTime hora(string pregunta){
+    public LocalTime hora(String pregunta){
         while(true){
             try{
                 return LocalTime.parse(linea(pregunta +" (HH:MM)"));

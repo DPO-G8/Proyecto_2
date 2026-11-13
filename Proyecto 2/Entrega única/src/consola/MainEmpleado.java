@@ -93,7 +93,7 @@ public class MainEmpleado {
                     System.out.println("  Sugerencia enviada (PENDIENTE).");
                 })
                 .opcion("Ver mis sugerencias y su estado", () -> {
-                    for (Sugerencia s : club.getGestorInventario().misSugerencias(empleado)) {
+                    for (Sugerencia s : club.getGestorInventario().consultarSugerencias(empleado)) {
                         System.out.println("  " + MainSocio.producto(s.getProducto()) + " -> " + s.getEstado());
                     }
                 })
@@ -104,7 +104,7 @@ public class MainEmpleado {
         Map<Integer, Integer> pedido = new LinkedHashMap<Integer, Integer>();
         boolean cafeteria = false;
         do {
-            Producto p = entrada.elegir("Producto:", club.getGestorVentas().catalogo(), MainSocio::producto);
+            Producto p = entrada.elegir("Producto:", new java.util.ArrayList<Producto>(club.getGestorVentas().getProductos().values()), MainSocio::producto);
             if (p instanceof Snack) {
                 System.out.println("  Aviso de alergenos: " + ((Snack) p).getAlergenos());
             }
@@ -126,8 +126,7 @@ public class MainEmpleado {
                 .opcion("Ver detalle e historial", () -> VistaTorneos.detalle(club, empleado, entrada))
                 .opcion("Inscribirme (gratis, sin premio en efectivo)", () -> {
                     Torneo t = VistaTorneos.elegir(club, empleado, entrada);
-                    String pareja = entrada.textoOpcional("Login de la pareja (solo dobles, otro empleado)");
-                    club.getGestorTorneos().inscribirEmpleado(empleado, t, pareja);
+                    club.getGestorTorneos().inscribirEmpleado(empleado, t);
                     System.out.println("  Inscrito como empleado.");
                 })
                 .opcion("Salirme de un torneo", () -> {
@@ -148,20 +147,16 @@ public class MainEmpleado {
         } else if (p instanceof PartidoInterno) {
             PartidoInterno pi = (PartidoInterno) p;
             que = "Interno: " + pi.getLocal().getNombre() + " vs " + pi.getVisitante().getNombre();
-        } else if (p instanceof PartidoPractica) {
+        } else {
             PartidoPractica pp = (PartidoPractica) p;
             que = "Practica " + pp.getDisciplina().getNombre() + " " + pp.getModalidad() + ": " + pp.getJugadores().size()
                     + " jugadores";
-        } else {
-            que = "Torneo: " + VistaTorneos.encuentro((Encuentro) p);
         }
         return p.getFecha() + " " + que + " - " + marcador;
     }
 
     static String sesion(SesionEntrenamiento s) {
-        String grupo = s.getEquipo() != null ? "equipo " + s.getEquipo().getNombre()
-                : (s.getDisciplina() != null ? s.getDisciplina().getNombre() + " " + s.getConvocados().size()
-                        + " convocados" : "");
+        String grupo = s.getEquipo() != null ? "equipo " + s.getEquipo().getNombre() : "sin equipo";
         String lugar = s.getInstalacion() != null ? s.getInstalacion().getNombre() : "sin instalacion";
         return s.getFecha() + " " + s.getHora() + " (" + s.getDuracion() + " min) " + s.getTipo() + " - "
                 + s.getEntrenador().getLogin() + ", " + grupo + " en " + lugar + ", " + s.getAsistencias().size()

@@ -31,7 +31,7 @@ public class FormularioEstadisticas {
     }
 
     public static Estadistica una(Entrada entrada, Socio socio, Partido partido, String deporte) {
-        int max = 999<
+        int max = 999;
         if(Texto.iguales(deporte, "Futbol")) {
             return new EstadisticaFutbol(socio, partido, entrada.entero("Goles", 0, max), entrada.entero("Asistencias", 0, max), entrada.entero("Tarjetas amarillas", 0, 2),
             entrada.entero("Tarjetas rojas", 0, 1));
