@@ -7,6 +7,7 @@ public class Torneo {
 	public static final String COMPETITIVO = "COMPETITIVO";
 	public static final String ABIERTO = "ABIERTO";
 	public static final String EN_CURSO = "EN_CURSO";
+	public static final String FINALIZADO = "FINALIZADO";
 	
 	public int getCuposTotales() {
 		throw new UnsupportedOperationException();
@@ -33,6 +34,9 @@ public class Torneo {
 		throw new UnsupportedOperationException();
 	}
 	public List<Encuentro> getEncuentros() {
+		throw new UnsupportedOperationException();
+	}
+	public List<InscripcionTorneo> getClasificacion() {
 		throw new UnsupportedOperationException();
 	}
 }

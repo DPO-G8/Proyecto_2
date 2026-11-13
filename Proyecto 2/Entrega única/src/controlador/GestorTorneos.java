@@ -23,4 +23,7 @@ public class GestorTorneos {
 	public void registrarResultado(Usuario quien, Torneo t, Encuentro e, int marcadorA, int marcadorB) throws Exception {
 		throw new UnsupportedOperationException();
 	}
+	public void finalizar(Usuario quien, Torneo t) throws Exception {
+		throw new UnsupportedOperationException();
+	}
 }
