@@ -22,7 +22,7 @@ import logica.usuarios.Administrador;
 import logica.usuarios.Empleado;
 import persistencia.RepositorioJSON;
 
-public class AprobarSugerenciatTest {
+public class AprobarSugerenciaTest {
 
 	// Crea una carpeta temporal para hacer todas las pruebas
 	@TempDir
