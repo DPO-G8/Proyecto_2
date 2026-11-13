@@ -105,4 +105,8 @@ public class Socio extends Usuario {
     public List<Bono> getBonos(){
     	throw new UnsupportedOperationException();
     }
+    public double getRanking(String disciplina) {
+    	throw new UnsupportedOperationException();
+
+    }
 }

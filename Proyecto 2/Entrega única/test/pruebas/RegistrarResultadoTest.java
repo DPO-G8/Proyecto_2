@@ -50,6 +50,52 @@ public class RegistrarResultadoTest {
 		assertEquals(3, encuentro.getParticipanteA().getPuntos(),"El ganador deberia tener 3 puntos");
 		assertEquals(0, encuentro.getParticipanteB().getPuntos(),"El perdedor deberia tener 0 puntos");
 	}
+	
+	//El ganador de un partido suma 20 a su ranking y el perdedor resto 20
+	@Test
+	public void hu_adm07_ca2_testRegistrarResultadoActualizaRanking() throws Exception{
+		Socio ana= new Socio("ana","1001",25);
+		Socio luis= new Socio("luis","1002",23);
+		ana.inscribirEnDisciplinaConRanking("Padel","Intermedio",1500);
+		luis.inscribirEnDisciplinaConRanking("Padel","Intermedio",1200);
+		gestor.registrarSocio(ana);
+		gestor.registrarSocio(luis);
+		Torneo conSocios = gestor.crearTorneo(admin, "Padel", "Intermedio", 12, Torneo.RECREATIVO, Torneo.SENCILLOS, LocalDate.now().plusDays(7), 0);
+		gestor.inscribirJugador(ana, conSocios, null);
+		gestor.inscribirJugador(luis, conSocios, null);
+		gestor.iniciar(admin, conSocios);
+		Encuentro partido = conSocios.getEncuentros().get(0);
+		Socio ganador = partido.getParticipanteA().getJugadores().get(0);
+		Socio perdedor = partido.getParticipanteB().getJugadores().get(0);
+		double rankingGanador = ganador.getRanking("Padel");
+		double rankingPerdedor = perdedor.getRanking("Padel");
+		gestor.registrarResultado(admin, conSocios, partido, 3, 1);
+		assertEquals(rankingGanador + 20, ganador.getRanking("Padel"),0.001, "El ganador deberia ganar 20 puntos");
+		assertEquals(rankingPerdedor - 20, perdedor.getRanking("Padel"),0.001, "El perdedor deberia perder 20 puntos");	
+	}
+	//El ranking del perdedor no puede bajar de 0
+	@Test
+	public void hu_adm07_ca2_testRegistrarResultadoActualizaRankingNoMenorCero() throws Exception{
+		Socio ana= new Socio("ana","1001",25);
+		Socio luis= new Socio("luis","1002",23);
+		ana.inscribirEnDisciplinaConRanking("Padel","Intermedio",10);
+		luis.inscribirEnDisciplinaConRanking("Padel","Intermedio",10);
+		gestor.registrarSocio(ana);
+		gestor.registrarSocio(luis);
+		Torneo conSocios = gestor.crearTorneo(admin, "Padel", "Intermedio", 12, Torneo.RECREATIVO, Torneo.SENCILLOS, LocalDate.now().plusDays(7), 0);
+		gestor.inscribirJugador(ana, conSocios, null);
+		gestor.inscribirJugador(luis, conSocios, null);
+		gestor.iniciar(admin, conSocios);
+		Encuentro partido = conSocios.getEncuentros().get(0);
+		Socio ganador = partido.getParticipanteA().getJugadores().get(0);
+		Socio perdedor = partido.getParticipanteB().getJugadores().get(0);
+		double rankingGanador = ganador.getRanking("Padel");
+		double rankingPerdedor = perdedor.getRanking("Padel");
+		gestor.registrarResultado(admin, conSocios, partido, 3, 1);
+		assertEquals(30, ganador.getRanking("Padel"),0.001, "El ganador deberia tener 30 puntos");
+		assertEquals(0, perdedor.getRanking("Padel"),0.001, "El perdedor deberia tener 0 puntos");	
+	}
+	
 	// Un deporte que no admite empates rechaza el resultado
 	@Test
 	public void hu_adm07_ca3_testRegistrarDeporteSinEmpates() throws Exception{
