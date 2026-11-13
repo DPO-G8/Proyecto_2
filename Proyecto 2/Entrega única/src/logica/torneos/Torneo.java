@@ -23,4 +23,11 @@ public class Torneo {
 	public double getTarifa() {
 		throw new UnsupportedOperationException();
 	}
+	public int cuposRegularesLibres() {
+		throw new UnsupportedOperationException();
+	}
+
+	public double totalRecaudado() {
+		throw new UnsupportedOperationException();
+	}
 }
