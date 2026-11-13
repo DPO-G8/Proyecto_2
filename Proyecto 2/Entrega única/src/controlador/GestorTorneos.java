@@ -4,6 +4,7 @@ import java.util.List;
 
 import logica.torneos.Torneo;
 import logica.usuarios.Usuario;
+import logica.usuarios.Socio;
 import logica.torneos.InscripcionTorneo;
 import logica.torneos.Encuentro;
 
@@ -27,6 +28,12 @@ public class GestorTorneos {
 		throw new UnsupportedOperationException();
 	}
 	public void retirarExterno(Usuario quien, Torneo t, String documento) throws Exception {
+		throw new UnsupportedOperationException();
+	}
+	public void registrarSocio(Socio s) {
+		throw new UnsupportedOperationException();
+	}
+	public InscripcionTorneo inscribirJugador(Usuario quien, Torneo t, String loginPareja) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 	

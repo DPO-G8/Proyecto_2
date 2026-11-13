@@ -4,6 +4,7 @@ import java.util.List;
 public class Torneo {
 	public static final String RECREATIVO = "RECREATIVO";
 	public static final String SENCILLOS = "SENCILLOS";
+	public static final String DOBLES = "DOBLES";
 	public static final String COMPETITIVO = "COMPETITIVO";
 	public static final String ABIERTO = "ABIERTO";
 	public static final String EN_CURSO = "EN_CURSO";
@@ -37,6 +38,9 @@ public class Torneo {
 		throw new UnsupportedOperationException();
 	}
 	public List<InscripcionTorneo> getClasificacion() {
+		throw new UnsupportedOperationException();
+	}
+	public int cuposOcupados() {
 		throw new UnsupportedOperationException();
 	}
 }

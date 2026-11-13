@@ -95,4 +95,8 @@ public class Socio extends Usuario {
         }
         return 0;
     }
+    
+    public void inscribirEnDisciplina(String disciplina, String nivel) {
+    	throw new UnsupportedOperationException();
+    }
 }
