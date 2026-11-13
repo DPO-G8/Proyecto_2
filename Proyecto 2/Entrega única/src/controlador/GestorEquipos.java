@@ -118,6 +118,16 @@ public class GestorEquipos {
             throw new Exception("Solo un administrador o el propio socio puede inscribirlo en un equipo");
         }
         Equipo equipo = buscarEquipo(nombreEquipo);
+        for (Equipo otro : equipo.getDeporte().getEquipos()) {
+            if (otro != equipo) {
+                for (InscripcionEquipo i : otro.getPlantilla()) {
+                    if (i.getSocio().getLogin().equals(loginSocio)) {
+                        throw new Exception(loginSocio + " ya pertenece al equipo " + otro.getNombre()
+                                + " de este deporte");
+                    }
+                }
+            }
+        }
         equipo.agregarJugador(new InscripcionEquipo((Socio) destino, posicion, numeroCamiseta));
         guardar();
     }

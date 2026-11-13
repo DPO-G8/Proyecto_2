@@ -48,6 +48,11 @@ public class GestorCompetencias {
         this.competencias = repositorio.cargarCompetencias(gestorEquipos.getDeportes(), usuarios);
         this.partidos = repositorio.cargarPartidos(usuarios, gestorEquipos.getDeportes(), competencias,
                 gestorReservas.getDisciplinas());
+        for (Partido p : partidos) {
+            if (p instanceof PartidoCompetencia && !p.getMarcador().isEmpty()) {
+                ((PartidoCompetencia) p).getEquipo().sumarPuntosCompetencia(puntosDe((PartidoCompetencia) p));
+            }
+        }
     }
 
     public ArrayList<Competencia> getCompetencias() {
@@ -133,8 +138,10 @@ public class GestorCompetencias {
             throws Exception {
         exigirEntrenadorDe(quien, partido.getEquipo());
         // calcularPuntos lanza excepcion si el resultado no es valido para el deporte (p. ej. empate en baloncesto)
-        partido.getCompetencia().calcularPuntos(golesFavor, golesContra);
+        int nuevos = partido.getCompetencia().calcularPuntos(golesFavor, golesContra);
+        int anteriores = partido.getMarcador().isEmpty() ? 0 : puntosDe(partido);
         partido.setMarcador(golesFavor + "-" + golesContra);
+        partido.getEquipo().sumarPuntosCompetencia(nuevos - anteriores);
         repositorio.guardarPartidos(partidos);
     }
 
@@ -144,8 +151,9 @@ public class GestorCompetencias {
             exigirEntrenadorDe(quien, ((PartidoCompetencia) partido).getEquipo());
         } else if (partido instanceof PartidoInterno) {
             exigirEntrenadorDe(quien, ((PartidoInterno) partido).getLocal());
-        } else if (!(quien instanceof Entrenador)) {
-            throw new Exception("Solo un entrenador puede registrar estadisticas");
+        } else if (!(quien instanceof Entrenador) && !(partido instanceof PartidoPractica
+                && ((PartidoPractica) partido).getJugadores().contains(quien))) {
+            throw new Exception("Solo un entrenador o un jugador del partido de practica puede registrar estadisticas");
         }
         Socio socio = estadistica.getSocio();
         boolean participo = partido.getAlineados().contains(socio);
@@ -162,6 +170,63 @@ public class GestorCompetencias {
             repositorio.guardarUsuarios(usuarios.values());
         }
         repositorio.guardarPartidos(partidos);
+    }
+
+    public void registrarResultadoPractica(Usuario quien, PartidoPractica partido, int marcadorA, int marcadorB)
+            throws Exception {
+        boolean esJugador = partido.getJugadores().contains(quien);
+        boolean esRival = partido.getRival() != null && partido.getRival() == quien;
+        if (!esJugador && !esRival) {
+            throw new Exception("Solo un jugador del partido o el entrenador rival puede registrar el resultado");
+        }
+        if (!partidos.contains(partido)) {
+            throw new Exception("El partido de practica no esta registrado en el club");
+        }
+        if (!partido.getMarcador().isEmpty()) {
+            throw new Exception("El partido ya tiene resultado: " + partido.getMarcador());
+        }
+        if (partido.getFecha().isAfter(LocalDate.now())) {
+            throw new Exception("El partido es el " + partido.getFecha() + " y todavia no se ha jugado");
+        }
+        if (marcadorA < 0 || marcadorB < 0) {
+            throw new Exception("El marcador no puede ser negativo");
+        }
+        if (marcadorA == marcadorB) {
+            throw new Exception("En " + partido.getDisciplina().getNombre() + " no se admiten empates");
+        }
+        List<Socio> ganadores = marcadorA > marcadorB ? partido.getLadoA() : partido.getLadoB();
+        List<Socio> perdedores = marcadorA > marcadorB ? partido.getLadoB() : partido.getLadoA();
+        List<InscripcionDisciplina> suben = new ArrayList<InscripcionDisciplina>();
+        List<InscripcionDisciplina> bajan = new ArrayList<InscripcionDisciplina>();
+        for (Socio s : ganadores) {
+            suben.add(inscripcionObligatoria(partido.getDisciplina(), s));
+        }
+        for (Socio s : perdedores) {
+            bajan.add(inscripcionObligatoria(partido.getDisciplina(), s));
+        }
+        partido.setMarcador(marcadorA + "-" + marcadorB);
+        for (InscripcionDisciplina i : suben) {
+            i.ajustarPuntaje(GestorTorneos.PUNTOS_RANKING);
+        }
+        for (InscripcionDisciplina i : bajan) {
+            i.ajustarPuntaje(-GestorTorneos.PUNTOS_RANKING);
+        }
+        repositorio.guardarPartidos(partidos);
+        repositorio.guardarDisciplinas(gestorReservas.getDisciplinas());
+    }
+
+    private InscripcionDisciplina inscripcionObligatoria(DisciplinaIndividual disciplina, Socio socio)
+            throws Exception {
+        InscripcionDisciplina i = inscripcionDe(disciplina, socio);
+        if (i == null) {
+            throw new Exception(socio.getLogin() + " no esta inscrito en " + disciplina.getNombre());
+        }
+        return i;
+    }
+
+    private int puntosDe(PartidoCompetencia partido) throws Exception {
+        String[] partes = partido.getMarcador().split("-");
+        return partido.getCompetencia().calcularPuntos(Integer.parseInt(partes[0]), Integer.parseInt(partes[1]));
     }
 
     // Tabla de posiciones

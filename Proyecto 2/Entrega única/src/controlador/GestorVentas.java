@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import logica.Texto;
-import logica.tienda.LineaVenta;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import logica.tienda.Articulo;
+import logica.tienda.LineaVenta;
 import logica.tienda.Bebida;
 import logica.tienda.Producto;
 import logica.tienda.Snack;
@@ -101,7 +101,8 @@ public class GestorVentas {
             }
             for (LineaVenta l : v.getLineas()) {
                 if (l.getProducto() instanceof Bebida && ((Bebida) l.getProducto()).isCaliente()) {
-                    throw new Exception("Acceso rechazado: el socio tiene una bebida caliente reciente");
+                    throw new Exception("No se puede reservar: el socio compro una bebida caliente en los ultimos "
+                            + MINUTOS_RESTRICCION + " minutos");
                 }
             }
         }
@@ -237,6 +238,9 @@ public class GestorVentas {
         }
         if (venta.getPorcentajeBono() > 0) {
             throw new Exception("El bono no es acumulable: la compra ya tiene un bono aplicado");
+        }
+        if (venta.getPuntosRedimidos() > 0 || venta.getComprador().getPorcentajeDescuento() > 0) {
+            throw new Exception("El bono no es acumulable con otros descuentos (puntos o codigo de empleado)");
         }
         venta.setPorcentajeBono(bono.getPorcentaje());
         bono.marcarUsado();

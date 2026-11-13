@@ -22,11 +22,30 @@ public class GestorReservas {
     private final RepositorioDatos repositorio;
     private final Map<String, Usuario> usuarios;
     private final ArrayList<DisciplinaIndividual> disciplinas;
+    private GestorVentas gestorVentas;
 
     public GestorReservas(RepositorioDatos repositorio, Map<String, Usuario> usuarios) throws Exception {
         this.repositorio = repositorio;
         this.usuarios = usuarios;
         this.disciplinas = repositorio.cargarDisciplinas(usuarios);
+    }
+
+    public void setGestorVentas(GestorVentas gestorVentas) {
+        this.gestorVentas = gestorVentas;
+    }
+
+    public ArrayList<Reserva> reservasDe(Socio socio) {
+        ArrayList<Reserva> lista = new ArrayList<Reserva>();
+        for (DisciplinaIndividual d : disciplinas) {
+            for (Instalacion i : d.getInstalaciones()) {
+                for (Reserva r : i.getReservas()) {
+                    if (r.getSocio().getLogin().equals(socio.getLogin())) {
+                        lista.add(r);
+                    }
+                }
+            }
+        }
+        return lista;
     }
 
     public ArrayList<DisciplinaIndividual> getDisciplinas() {
@@ -49,6 +68,9 @@ public class GestorReservas {
 
         DisciplinaIndividual disciplina = buscarDisciplinaDe(idInstalacion);
         Instalacion instalacion = buscarInstalacion(disciplina, idInstalacion);
+        if (gestorVentas != null) {
+            gestorVentas.verificarAcceso((Socio) usuario, idInstalacion);
+        }
 
         if (!instalacion.cabe(cantidadJugadores, modalidad)) {
             throw new Exception("La instalacion '" + instalacion.getNombre() + "' no admite " + cantidadJugadores

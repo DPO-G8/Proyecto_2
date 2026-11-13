@@ -12,6 +12,7 @@ public class Club {
     private final GestorCompetencias gestorCompetencias;
     private final GestorEntrenamientos gestorEntrenamientos;
     private final GestorTurnos gestorTurnos;
+    private final GestorTorneos gestorTorneos;
 
     // Usa la carpeta datos
     public Club() throws Exception {
@@ -22,6 +23,7 @@ public class Club {
         this.gestorUsuarios = new GestorUsuarios(repositorio);
         this.gestorReservas = new GestorReservas(repositorio, gestorUsuarios.getUsuarios());
         this.gestorVentas = new GestorVentas(repositorio, gestorUsuarios.getUsuarios(), gestorReservas);
+        gestorReservas.setGestorVentas(gestorVentas);
         this.gestorInventario = new GestorInventario(repositorio, gestorUsuarios.getUsuarios(), gestorVentas);
         this.gestorEquipos = new GestorEquipos(repositorio, gestorUsuarios.getUsuarios());
         this.gestorCompetencias = new GestorCompetencias(repositorio, gestorUsuarios.getUsuarios(), gestorEquipos,
@@ -29,6 +31,8 @@ public class Club {
         this.gestorEntrenamientos = new GestorEntrenamientos(repositorio, gestorUsuarios.getUsuarios(),
                 gestorEquipos, gestorReservas);
         this.gestorTurnos = new GestorTurnos(repositorio, gestorUsuarios.getUsuarios());
+        this.gestorTorneos = new GestorTorneos(repositorio, gestorUsuarios.getUsuarios(), gestorReservas.getDisciplinas(),
+                gestorEquipos.getDeportes());
     }
 
     public GestorUsuarios getGestorUsuarios() {
@@ -61,5 +65,9 @@ public class Club {
 
     public GestorTurnos getGestorTurnos() {
         return gestorTurnos;
+    }
+
+    public GestorTorneos getGestorTorneos() {
+        return gestorTorneos;
     }
 }
