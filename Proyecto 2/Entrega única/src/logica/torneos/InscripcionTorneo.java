@@ -68,4 +68,7 @@ public class InscripcionTorneo {
 	public List<Socio> getJugadores(){
 		return socios;
 	}
+	public boolean esEmpleado() {
+		throw new UnsupportedOperationException();
+	}
 }

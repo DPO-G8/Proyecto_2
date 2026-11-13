@@ -20,6 +20,7 @@ import logica.torneos.PersonaExterna;
 import logica.torneos.Torneo;
 import logica.usuarios.Administrador;
 import logica.usuarios.Socio;
+import logica.usuarios.Entrenador;
 
 public class FinalizarTorneoTest {
 	private Administrador admin;
@@ -80,6 +81,29 @@ public class FinalizarTorneoTest {
 		assertEquals(300000, clasificacion.get(1).getPremio(), 0.001, "El segundo deberia recibir 300.000");
 		assertEquals(100000, clasificacion.get(2).getPremio(), 0.001, "El tercero deberia recibir 100.000");
 		assertEquals(0, clasificacion.get(3).getPremio(), 0.001, "El cuarto no deberia recibir nada");
+	}
+	
+	//En un torneo competitivo un empleado no puede recibir premio y este se reparte 60,30,10 entre aquellos que si pueden recibirlo
+	@Test
+	public void hu_adm08_ca3_testEmpleadoNoPremio() throws Exception{
+		Torneo competitivo = gestor.crearTorneo(admin, "Padel", "Intermedio", 12, Torneo.COMPETITIVO,Torneo.SENCILLOS, LocalDate.now().plusDays(7), 250000);
+		gestor.inscribirEmpleado(new Entrenador("entrenador1", "1", "COD-E1"), competitivo);
+		gestor.inscribirExterno(admin, competitivo, "Externo 1", "301", PersonaExterna.EXTERNO, null);
+		gestor.inscribirExterno(admin, competitivo, "Externo 2", "302", PersonaExterna.EXTERNO, null);
+		gestor.iniciar(admin, competitivo);
+		jugarTodos(competitivo);
+		gestor.finalizar(admin, competitivo);
+		double[] esperados = {300000,150000};
+		int siguiente = 0;
+		for (InscripcionTorneo inscripcion : competitivo.getClasificacion()) {
+			if (inscripcion.esEmpleado()) {
+				assertEquals(0, inscripcion.getPremio(), 0.001, "El empleado no deberia recibir premio en efectivo");
+			} else {
+				assertEquals(esperados[siguiente], inscripcion.getPremio(), 0.001, "El premio deberia seguir el orden entre quienes pueden recibirlo");
+				siguiente++;
+			}
+		}
+		assertEquals(2, siguiente, "Deberian recibir premio los dos participantes que no son empleados");
 	}
 
 	// En un recreativo en estado finalizado los tres primeros socios deben recibir

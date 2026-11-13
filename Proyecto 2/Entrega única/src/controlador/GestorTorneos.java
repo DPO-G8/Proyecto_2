@@ -208,5 +208,8 @@ public class GestorTorneos {
 	public void registrarEquipo(Equipo equipo){
 		throw new UnsupportedOperationException();
 	}
+	public InscripcionTorneo inscribirEmpleado(Usuario quien, Torneo t) throws Exception{
+		throw new UnsupportedOperationException();
+	}
 	
 }
