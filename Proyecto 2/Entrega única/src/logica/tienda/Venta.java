@@ -11,6 +11,7 @@ public abstract class Venta {
     private Usuario comprador;
     private List<LineaVenta> lineas;
     private int puntosRedimidos;
+    private double porcentajeBono;
 
     public Venta(Usuario comprador) {
         this.comprador = comprador;
@@ -36,6 +37,14 @@ public abstract class Venta {
         this.puntosRedimidos = puntosRedimidos;
     }
 
+    public double getPorcentajeBono() {
+        return this.porcentajeBono;
+    }
+
+    public void setPorcentajeBono(double porcentajeBono) {
+        this.porcentajeBono = porcentajeBono;
+    }
+
     public Usuario getComprador() {
         return this.comprador;
     }
@@ -57,7 +66,8 @@ public abstract class Venta {
     }
 
     public double calcularTotal() {
-        double base = calcularSubtotal() * (1 - this.comprador.getPorcentajeDescuento()) - this.puntosRedimidos;
+        double descuento = this.porcentajeBono > 0 ? this.porcentajeBono : this.comprador.getPorcentajeDescuento();
+        double base = calcularSubtotal() * (1 - descuento) - this.puntosRedimidos;
         return Math.max(base, 0);
     }
 }

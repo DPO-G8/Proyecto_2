@@ -4,6 +4,8 @@ import logica.Texto;
 import logica.usuarios.Socio;
 
 public class InscripcionDisciplina {
+    public static final double PUNTAJE_INICIAL = 1000;
+
     private String nivel;
     private double puntajeRanking;
     private Socio socio;
@@ -20,6 +22,10 @@ public class InscripcionDisciplina {
 
     public double getPuntajeRanking() {
         return this.puntajeRanking;
+    }
+
+    public void ajustarPuntaje(double delta) {
+        this.puntajeRanking = Math.max(0, this.puntajeRanking + delta);
     }
 
     public Socio getSocio() {

@@ -232,6 +232,15 @@ public class GestorVentas {
         return venta;
     }
     public void redimirBono(Socio socio, Bono bono, Venta venta) throws Exception {
-    	throw new UnsupportedOperationException();
+        if (bono.isUsado()) {
+            throw new Exception("El bono ya fue usado");
+        }
+        if (venta.getPorcentajeBono() > 0) {
+            throw new Exception("El bono no es acumulable: la compra ya tiene un bono aplicado");
+        }
+        venta.setPorcentajeBono(bono.getPorcentaje());
+        bono.marcarUsado();
+        repositorio.guardarVentas(ventas);
+        repositorio.guardarUsuarios(usuarios.values());
     }
 }

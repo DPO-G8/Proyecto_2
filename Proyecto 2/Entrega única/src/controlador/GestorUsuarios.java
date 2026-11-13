@@ -74,6 +74,7 @@ public class GestorUsuarios {
     
     // Poder otorgar bonos
     public void otorgarBono(Socio socio, Bono bono) throws Exception {
-    	throw new UnsupportedOperationException();
+        socio.agregarBono(bono);
+        repositorio.guardarUsuarios(usuarios.values());
     }
 }

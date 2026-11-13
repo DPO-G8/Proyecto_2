@@ -1,15 +1,23 @@
 package logica.usuarios;
 
 public class Bono {
+	private double porcentaje;
+	private boolean usado;
+
 	public Bono(double porcentaje) {
-		throw new UnsupportedOperationException();
+		this.porcentaje = porcentaje;
+		this.usado = false;
 	}
 
 	public double getPorcentaje() {
-		throw new UnsupportedOperationException();
+		return porcentaje;
 	}
 
 	public boolean isUsado() {
-		throw new UnsupportedOperationException();
+		return usado;
+	}
+
+	public void marcarUsado() {
+		this.usado = true;
 	}
 }

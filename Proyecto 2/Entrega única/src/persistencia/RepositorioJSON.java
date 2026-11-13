@@ -46,6 +46,7 @@ import logica.tienda.Venta;
 import logica.tienda.VentaCafeteria;
 import logica.tienda.VentaTienda;
 import logica.usuarios.Administrador;
+import logica.usuarios.Bono;
 import logica.usuarios.Empleado;
 import logica.usuarios.Entrenador;
 import logica.usuarios.Fisioterapeuta;
@@ -76,6 +77,14 @@ public class RepositorioJSON implements RepositorioDatos {
 	                if (socio.getEmpleadoDescuento() != null) {
 	                    json.put("empleadoDescuento", socio.getEmpleadoDescuento().getLogin());
 	                }
+	                JSONArray bonos = new JSONArray();
+	                for (Bono b : socio.getBonos()) {
+	                    JSONObject jb = new JSONObject();
+	                    jb.put("porcentaje", b.getPorcentaje());
+	                    jb.put("usado", b.isUsado());
+	                    bonos.put(jb);
+	                }
+	                json.put("bonos", bonos);
 	            } else if (u instanceof Administrador) {
 	                json.put("tipo", "ADMINISTRADOR");
 	            } else if (u instanceof Empleado) {
@@ -110,6 +119,14 @@ public class RepositorioJSON implements RepositorioDatos {
 	                Socio nuevo = new Socio(login, password, json.getInt("edad"));
 	                if (json.has("fechaFinSuspension")) {
 	                    nuevo.setFechaFinSuspension(LocalDate.parse(json.getString("fechaFinSuspension")));
+	                }
+	                JSONArray bonos = json.has("bonos") ? json.getJSONArray("bonos") : new JSONArray();
+	                for (int j = 0; j < bonos.length(); j++) {
+	                    Bono bono = new Bono(bonos.getJSONObject(j).getDouble("porcentaje"));
+	                    if (bonos.getJSONObject(j).getBoolean("usado")) {
+	                        bono.marcarUsado();
+	                    }
+	                    nuevo.agregarBono(bono);
 	                }
 	                usuario = nuevo;
 	                break;
@@ -306,6 +323,7 @@ public class RepositorioJSON implements RepositorioDatos {
 	            json.put("fecha", v.getFecha().toString());
 	            json.put("comprador", v.getComprador().getLogin());
 	            json.put("puntosRedimidos", v.getPuntosRedimidos());
+	            json.put("porcentajeBono", v.getPorcentajeBono());
 	            if (v instanceof VentaCafeteria) {
 	                json.put("tipo", "CAFETERIA");
 	                json.put("propina", ((VentaCafeteria) v).getPorcentajePropina());
@@ -344,6 +362,7 @@ public class RepositorioJSON implements RepositorioDatos {
 	            }
 	            venta.setFecha(LocalDateTime.parse(json.getString("fecha")));
 	            venta.setPuntosRedimidos(json.getInt("puntosRedimidos"));
+	            venta.setPorcentajeBono(json.optDouble("porcentajeBono", 0));
 	            JSONArray lineas = json.getJSONArray("lineas");
 	            for (int j = 0; j < lineas.length(); j++) {
 	                JSONObject jl = lineas.getJSONObject(j);

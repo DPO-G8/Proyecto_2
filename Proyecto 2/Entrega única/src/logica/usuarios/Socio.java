@@ -2,11 +2,15 @@ package logica.usuarios;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import logica.Texto;
 import logica.deportes.Competencia;
 import logica.deportes.Estadistica;
 import logica.deportes.EstadisticaFutbol;
+import logica.deportes.InscripcionDisciplina;
 import logica.deportes.Partido;
 import logica.deportes.PartidoCompetencia;
 
@@ -17,6 +21,8 @@ public class Socio extends Usuario {
     private LocalDate fechaFinSuspension;
     private Empleado empleadoDescuento;
     private List<Estadistica> estadisticas;
+    private Map<String, InscripcionDisciplina> disciplinas;
+    private List<Bono> bonos;
 
     public Socio(String login, String password, int edad) {
         super(login, password);
@@ -24,6 +30,8 @@ public class Socio extends Usuario {
         this.fechaFinSuspension = null;
         this.empleadoDescuento = null;
         this.estadisticas = new ArrayList<Estadistica>();
+        this.disciplinas = new LinkedHashMap<String, InscripcionDisciplina>();
+        this.bonos = new ArrayList<Bono>();
     }
 
     public int getEdad() {
@@ -97,16 +105,34 @@ public class Socio extends Usuario {
     }
    
     public void inscribirEnDisciplina(String disciplina, String nivel) {
-    	throw new UnsupportedOperationException();
+        inscribirEnDisciplinaConRanking(disciplina, nivel, InscripcionDisciplina.PUNTAJE_INICIAL);
     }
+
     public void inscribirEnDisciplinaConRanking(String disciplina, String nivel, double puntajeRanking) {
-    	throw new UnsupportedOperationException();
+        agregarInscripcionDisciplina(disciplina, new InscripcionDisciplina(this, nivel, puntajeRanking));
     }
-    public List<Bono> getBonos(){
-    	throw new UnsupportedOperationException();
+
+    public void agregarInscripcionDisciplina(String disciplina, InscripcionDisciplina inscripcion) {
+        this.disciplinas.put(disciplina, inscripcion);
+    }
+
+    public InscripcionDisciplina getInscripcionDisciplina(String disciplina) {
+        for (Map.Entry<String, InscripcionDisciplina> e : this.disciplinas.entrySet()) {
+            if (Texto.iguales(e.getKey(), disciplina)) {
+                return e.getValue();
+            }
+        }
+        return null;
+    }
+
+    public List<Bono> getBonos() {
+        return this.bonos;
+    }
+
+    public void agregarBono(Bono bono) {
+        this.bonos.add(bono);
     }
     public double getRanking(String disciplina) {
-    	throw new UnsupportedOperationException();
-
+        return getInscripcionDisciplina(disciplina).getPuntajeRanking();
     }
 }
