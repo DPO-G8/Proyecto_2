@@ -39,7 +39,7 @@ public class GestorTorneos {
 	public void salirDeTorneo(Usuario quien, Torneo t) throws Exception{
 		throw new UnsupportedOperationException();
 	}
-	public void buscarTorneo(int id) throws Exception{
+	public Torneo buscarTorneo(int id) throws Exception{
 		throw new UnsupportedOperationException();
 	}
 	
