@@ -155,4 +155,7 @@ public class GestorInventario {
             throw new Exception("Solo un administrador puede hacer esta operacion");
         }
     }
+    public ArrayList<Sugerencia> consultarSugerencias(Usuario quien) throws Exception{
+    	throw new UnsupportedOperationException();
+    }
 }
