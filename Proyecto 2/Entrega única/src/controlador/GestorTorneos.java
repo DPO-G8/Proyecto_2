@@ -36,5 +36,8 @@ public class GestorTorneos {
 	public InscripcionTorneo inscribirJugador(Usuario quien, Torneo t, String loginPareja) throws Exception {
 		throw new UnsupportedOperationException();
 	}
+	public void salirDeTorneo(Usuario quien, Torneo t) throws Exception{
+		throw new UnsupportedOperationException();
+	}
 	
 }
