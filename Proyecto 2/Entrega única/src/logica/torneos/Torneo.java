@@ -46,4 +46,17 @@ public class Torneo {
 	public int cuposOcupados() {
 		throw new UnsupportedOperationException();
 	}
+	public List<InscripcionTorneo> getParticipantes() {
+		throw new UnsupportedOperationException();
+	}
+	public List<InscripcionTorneo> getPosiciones() {
+		throw new UnsupportedOperationException();
+	}
+	public List<Encuentro> getEncuentrosJugados() {
+		throw new UnsupportedOperationException();
+	}
+	public List<Encuentro> getEncuentrosPendientes() {
+		throw new UnsupportedOperationException();
+	}
+	
 }
