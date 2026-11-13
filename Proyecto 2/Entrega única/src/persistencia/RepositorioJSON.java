@@ -45,6 +45,12 @@ import logica.tienda.Snack;
 import logica.tienda.Venta;
 import logica.tienda.VentaCafeteria;
 import logica.tienda.VentaTienda;
+import logica.torneos.Encuentro;
+import logica.torneos.InscripcionTorneo;
+import logica.torneos.PersonaExterna;
+import logica.torneos.Torneo;
+import logica.torneos.TorneoConjunto;
+import logica.torneos.TorneoIndividual;
 import logica.usuarios.Administrador;
 import logica.usuarios.Bono;
 import logica.usuarios.Empleado;
@@ -253,8 +259,6 @@ public class RepositorioJSON implements RepositorioDatos {
 	        return disciplinas;
 	    }
 
-
-
 	    @Override
 	    public void guardarProductos(Collection<Producto> productos) throws Exception {
 	        JSONArray arreglo = new JSONArray();
@@ -373,7 +377,6 @@ public class RepositorioJSON implements RepositorioDatos {
 	        }
 	        return ventas;
 	    }
-
 
 	    // ------------------------------------------------------------ deportes y equipos
 	    @Override
@@ -832,6 +835,133 @@ public class RepositorioJSON implements RepositorioDatos {
 	    }
 
 	    // ----------------------------------------------------------------------- busquedas
+	    @Override
+	    public void guardarTorneos(Collection<Torneo> torneos) throws Exception {
+	        JSONArray arreglo = new JSONArray();
+	        for (Torneo t : torneos) {
+	            JSONObject json = new JSONObject();
+	            json.put("id", t.getId());
+	            if (t instanceof TorneoIndividual) {
+	                json.put("clase", "INDIVIDUAL");
+	                json.put("modalidad", ((TorneoIndividual) t).getModalidad());
+	            } else {
+	                json.put("clase", "CONJUNTO");
+	            }
+	            json.put("deporte", t.getNombreDeporte());
+	            json.put("categoriaONivel", t.getCategoriaONivel());
+	            json.put("cupos", t.getCuposTotales());
+	            json.put("tipo", t.getTipo());
+	            json.put("fecha", t.getFecha().toString());
+	            json.put("tarifa", t.getTarifa());
+	            json.put("estado", t.getEstado());
+	            JSONArray participantes = new JSONArray();
+	            for (InscripcionTorneo i : t.getParticipantes()) {
+	                JSONObject jp = new JSONObject();
+	                if (i.getExterno() != null) {
+	                    jp.put("clase", "EXTERNO");
+	                    jp.put("nombre", i.getExterno().getNombre());
+	                    jp.put("documento", i.getExterno().getDocumento());
+	                    jp.put("tipo", i.getExterno().getTipo());
+	                    jp.put("codigo", i.getExterno().getCodigo());
+	                } else if (i.getEquipo() != null) {
+	                    jp.put("clase", "EQUIPO");
+	                    jp.put("equipo", i.getEquipo().getNombre());
+	                } else if (i.getEmpleado() != null) {
+	                    jp.put("clase", "EMPLEADO");
+	                    jp.put("login", i.getEmpleado().getLogin());
+	                } else {
+	                    jp.put("clase", "SOCIO");
+	                    JSONArray logins = new JSONArray();
+	                    for (Socio s : i.getJugadores()) {
+	                        logins.put(s.getLogin());
+	                    }
+	                    jp.put("logins", logins);
+	                }
+	                jp.put("preferencial", i.isPreferencial());
+	                jp.put("tarifaPagada", i.getTarifaPagada());
+	                jp.put("puntos", i.getPuntos());
+	                jp.put("premio", i.getPremio());
+	                participantes.put(jp);
+	            }
+	            json.put("participantes", participantes);
+	            JSONArray encuentros = new JSONArray();
+	            for (Encuentro e : t.getEncuentros()) {
+	                JSONObject je = new JSONObject();
+	                je.put("participanteA", t.getParticipantes().indexOf(e.getParticipanteA()));
+	                je.put("participanteB", t.getParticipantes().indexOf(e.getParticipanteB()));
+	                je.put("jugado", e.isJugado());
+	                je.put("marcadorA", e.getMarcadorA());
+	                je.put("marcadorB", e.getMarcadorB());
+	                encuentros.put(je);
+	            }
+	            json.put("encuentros", encuentros);
+	            arreglo.put(json);
+	        }
+	        escribir("torneos.json", arreglo);
+	    }
+
+	    @Override
+	    public ArrayList<Torneo> cargarTorneos(Map<String, Usuario> usuarios, ArrayList<DeporteConjunto> deportes)
+	            throws Exception {
+	        ArrayList<Torneo> torneos = new ArrayList<Torneo>();
+	        JSONArray arreglo = leer("torneos.json");
+	        for (int k = 0; k < arreglo.length(); k++) {
+	            JSONObject json = arreglo.getJSONObject(k);
+	            LocalDate fecha = LocalDate.parse(json.getString("fecha"));
+	            Torneo t;
+	            if (json.getString("clase").equals("INDIVIDUAL")) {
+	                t = new TorneoIndividual(json.getInt("id"), json.getString("deporte"),
+	                        json.getString("categoriaONivel"), json.getString("modalidad"), json.getInt("cupos"),
+	                        json.getString("tipo"), fecha, json.getDouble("tarifa"));
+	            } else {
+	                t = new TorneoConjunto(json.getInt("id"), json.getString("deporte"), json.getString("categoriaONivel"),
+	                        json.getInt("cupos"), json.getString("tipo"), fecha, json.getDouble("tarifa"));
+	            }
+	            t.setEstado(json.getString("estado"));
+	            JSONArray participantes = json.getJSONArray("participantes");
+	            for (int j = 0; j < participantes.length(); j++) {
+	                JSONObject jp = participantes.getJSONObject(j);
+	                boolean preferencial = jp.getBoolean("preferencial");
+	                double tarifaPagada = jp.getDouble("tarifaPagada");
+	                InscripcionTorneo i;
+	                switch (jp.getString("clase")) {
+	                case "EXTERNO":
+	                    i = new InscripcionTorneo(new PersonaExterna(jp.getString("nombre"), jp.getString("documento"),
+	                            jp.getString("tipo"), jp.has("codigo") ? jp.getString("codigo") : null), preferencial,
+	                            tarifaPagada);
+	                    break;
+	                case "EQUIPO":
+	                    i = new InscripcionTorneo(buscarEquipo(deportes, jp.getString("equipo")), preferencial,
+	                            tarifaPagada);
+	                    break;
+	                case "EMPLEADO":
+	                    i = new InscripcionTorneo((Empleado) usuarios.get(jp.getString("login")), preferencial);
+	                    break;
+	                default:
+	                    JSONArray logins = jp.getJSONArray("logins");
+	                    Socio pareja = logins.length() > 1 ? (Socio) usuarios.get(logins.getString(1)) : null;
+	                    i = new InscripcionTorneo((Socio) usuarios.get(logins.getString(0)), pareja, preferencial,
+	                            tarifaPagada);
+	                }
+	                i.sumarPuntos(jp.getInt("puntos"));
+	                i.setPremio(jp.getDouble("premio"));
+	                t.agregarParticipante(i);
+	            }
+	            JSONArray encuentros = json.getJSONArray("encuentros");
+	            for (int j = 0; j < encuentros.length(); j++) {
+	                JSONObject je = encuentros.getJSONObject(j);
+	                Encuentro e = new Encuentro(j + 1, t.getParticipantes().get(je.getInt("participanteA")),
+	                        t.getParticipantes().get(je.getInt("participanteB")));
+	                if (je.getBoolean("jugado")) {
+	                    e.registrarResultado(je.getInt("marcadorA"), je.getInt("marcadorB"));
+	                }
+	                t.agregarEncuentro(e);
+	            }
+	            torneos.add(t);
+	        }
+	        return torneos;
+	    }
+
 	    private DeporteConjunto buscarDeporte(ArrayList<DeporteConjunto> deportes, String nombre) {
 	        for (DeporteConjunto d : deportes) {
 	            if (d.getNombre().equals(nombre)) {

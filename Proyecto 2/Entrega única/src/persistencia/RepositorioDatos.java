@@ -10,6 +10,7 @@ import logica.deportes.SesionEntrenamiento;
 import logica.tienda.Producto;
 import logica.tienda.Venta;
 import logica.deportes.DisciplinaIndividual;
+import logica.torneos.Torneo;
 
 public interface RepositorioDatos {
 	Map<String, Usuario> cargarUsuarios() throws Exception;
@@ -59,4 +60,8 @@ public interface RepositorioDatos {
 	void cargarSugerencias(Map<String, Usuario> usuarios) throws Exception;
 
 	void guardarSugerencias(Collection<Usuario> usuarios) throws Exception;
+
+	ArrayList<Torneo> cargarTorneos(Map<String, Usuario> usuarios, ArrayList<DeporteConjunto> deportes) throws Exception;
+
+	void guardarTorneos(Collection<Torneo> torneos) throws Exception;
 }
