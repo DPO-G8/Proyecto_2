@@ -16,5 +16,7 @@ public class GestorTorneos {
 	public InscripcionTorneo inscribirExterno(Usuario quien, Torneo t, String nombre, String documento, String tipo, String codigo) throws Exception {
 		throw new UnsupportedOperationException();
 	}
-
+	public void iniciar(Usuario quien, Torneo t) throws Exception {
+		throw new UnsupportedOperationException();
+	}
 }

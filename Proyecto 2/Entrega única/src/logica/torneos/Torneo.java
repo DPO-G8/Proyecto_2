@@ -1,10 +1,12 @@
 package logica.torneos;
+import java.util.List;
 
 public class Torneo {
 	public static final String RECREATIVO = "RECREATIVO";
 	public static final String SENCILLOS = "SENCILLOS";
 	public static final String COMPETITIVO = "COMPETITIVO";
 	public static final String ABIERTO = "ABIERTO";
+	public static final String EN_CURSO = "EN_CURSO";
 	
 	public int getCuposTotales() {
 		throw new UnsupportedOperationException();
@@ -28,6 +30,9 @@ public class Torneo {
 	}
 
 	public double totalRecaudado() {
+		throw new UnsupportedOperationException();
+	}
+	public List<Encuentro> getEncuentros() {
 		throw new UnsupportedOperationException();
 	}
 }
