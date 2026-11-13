@@ -30,6 +30,9 @@ public class Torneo {
 	public int cuposRegularesLibres() {
 		throw new UnsupportedOperationException();
 	}
+	public int cuposPreferencialesLibres() {
+		throw new UnsupportedOperationException();
+	}
 
 	public double totalRecaudado() {
 		throw new UnsupportedOperationException();
