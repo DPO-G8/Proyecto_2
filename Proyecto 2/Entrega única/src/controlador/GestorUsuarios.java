@@ -4,6 +4,7 @@ import java.util.Map;
 import logica.usuarios.Empleado;
 import logica.usuarios.Socio;
 import logica.usuarios.Usuario;
+import logica.usuarios.Bono;
 import persistencia.RepositorioDatos;
 public class GestorUsuarios {
 	private final RepositorioDatos repositorio;
@@ -69,5 +70,10 @@ public class GestorUsuarios {
             return "SUSPENDIDO hasta " + socio.getFechaFinSuspension();
         }
         return "HABILITADO";
+    }
+    
+    // Poder otorgar bonos
+    public void otorgarBono(Socio socio, Bono bono) throws Exception {
+    	throw new UnsupportedOperationException();
     }
 }

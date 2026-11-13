@@ -102,4 +102,7 @@ public class Socio extends Usuario {
     public void inscribirEnDisciplinaConRanking(String disciplina, String nivel, double puntajeRanking) {
     	throw new UnsupportedOperationException();
     }
+    public List<Bono> getBonos(){
+    	throw new UnsupportedOperationException();
+    }
 }

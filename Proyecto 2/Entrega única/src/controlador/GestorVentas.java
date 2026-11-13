@@ -18,6 +18,7 @@ import logica.tienda.VentaTienda;
 import logica.usuarios.Administrador;
 import logica.usuarios.Socio;
 import logica.usuarios.Usuario;
+import logica.usuarios.Bono;
 import persistencia.RepositorioDatos;
 
 public class GestorVentas {
@@ -229,5 +230,8 @@ public class GestorVentas {
         repositorio.guardarVentas(ventas);
         repositorio.guardarUsuarios(usuarios.values());
         return venta;
+    }
+    public void redimirBono(Socio socio, Bono bono, Venta venta) throws Exception {
+    	throw new UnsupportedOperationException();
     }
 }
