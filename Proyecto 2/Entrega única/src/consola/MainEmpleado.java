@@ -16,7 +16,7 @@ import logica.tienda.Producto;
 import logica.tienda.Snack;
 import logica.tienda.Sugerencia;
 import logica.tienda.Venta;
-import logica.torneos.PartidoTorneo;
+import logica.torneos.Encuentro;
 import logica.torneos.Torneo;
 import logica.usuarios.Empleado;
 import logica.usuarios.Entrenador;
@@ -127,12 +127,12 @@ public class MainEmpleado {
                 .opcion("Inscribirme (gratis, sin premio en efectivo)", () -> {
                     Torneo t = VistaTorneos.elegir(club, empleado, entrada);
                     String pareja = entrada.textoOpcional("Login de la pareja (solo dobles, otro empleado)");
-                    club.getGestorTorneos().inscribirEmpleado(empleado, t.getId(), pareja);
+                    club.getGestorTorneos().inscribirEmpleado(empleado, t, pareja);
                     System.out.println("  Inscrito como empleado.");
                 })
                 .opcion("Salirme de un torneo", () -> {
                     Torneo t = VistaTorneos.elegir(club, empleado, entrada);
-                    club.getGestorTorneos().salirDeTorneo(empleado, t.getId());
+                    club.getGestorTorneos().salirDeTorneo(empleado, t);
                     System.out.println("  Inscripcion retirada.");
                 })
                 .mostrar();
@@ -153,7 +153,7 @@ public class MainEmpleado {
             que = "Practica " + pp.getDisciplina().getNombre() + " " + pp.getModalidad() + ": " + pp.getJugadores().size()
                     + " jugadores";
         } else {
-            que = "Torneo: " + VistaTorneos.encuentro((PartidoTorneo) p);
+            que = "Torneo: " + VistaTorneos.encuentro((Encuentro) p);
         }
         return p.getFecha() + " " + que + " - " + marcador;
     }

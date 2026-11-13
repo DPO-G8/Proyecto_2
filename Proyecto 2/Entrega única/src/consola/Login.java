@@ -10,13 +10,13 @@ public class Login {
         boolean permite(Usuario usuario);
     }
 
-    private static Usuario login(Club club, Entrada entrada, String nombreRol, Rol rol) {
+    private static Usuario autenticar(Club club, Entrada entrada, String nombreRol, Rol rol) {
         System.out.println("=== Club Deportivo Seneca: consola de " + nombreRol + " ===");
         for (int intento = 1; intento <= INTENTOS; intento++) {
             String login= entrada.texto("Login");
-            String password = entrada.texto("Contasena");
+            String password = entrada.texto("Contrasena");
             try{
-                Usuario usuario = club.getGestorUsuarios().authenticar(login,pasword);
+                Usuario usuario = club.getGestorUsuarios().authenticar(login,password);
                 if (rol.permite(usuario)){
                     return usuario;
                 }
@@ -24,7 +24,7 @@ public class Login {
             } catch (Exception e) {
                 System.out.println(" "+ e.getMessage());
             }
-            System.out.println(" Intentos restantes; " +(INTENTOS-intento));
+            System.out.println(" Intentos restantes: " +(INTENTOS-intento));
         }
         System.out.println("Demasiados intentos fallidos.");
         return null;

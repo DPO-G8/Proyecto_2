@@ -219,14 +219,14 @@ public class MainSocio {
                 .opcion("Inscribirme en un torneo individual", () -> {
                     Torneo t = VistaTorneos.elegir(club, socio, entrada);
                     String pareja = entrada.textoOpcional("Login de la pareja (solo dobles)");
-                    boolean preferencial = club.getGestorTorneos().inscribirJugador(socio, t.getId(), pareja)
+                    boolean preferencial = club.getGestorTorneos().inscribirJugador(socio, t, pareja)
                             .isPreferencial();
                     System.out.println("  Inscrito con cupo " + (preferencial ? "preferencial" : "regular")
                             + (t.esCompetitivo() ? ". Tarifa pagada: " + VistaTorneos.dinero(t.getTarifa()) : ""));
                 })
                 .opcion("Salirme de un torneo", () -> {
                     Torneo t = VistaTorneos.elegir(club, socio, entrada);
-                    club.getGestorTorneos().salirDeTorneo(socio, t.getId());
+                    club.getGestorTorneos().salirDeTorneo(socio, t);
                     System.out.println("  Inscripcion retirada; el cupo queda libre.");
                 })
                 .opcion("Mis bonos", this::mostrarBonos)

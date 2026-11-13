@@ -25,16 +25,16 @@ public class FormularioEstadisticas {
                 System.out.println(" No existe un socio con ese login");
                 continue;
             }
-            lista.add(una(entrada, (Socio) u, partido, deporte;
+            lista.add(una(entrada, (Socio) u, partido, deporte));
         }
         return lista;
     }
 
     public static Estadistica una(Entrada entrada, Socio socio, Partido partido, String deporte) {
-        int max = 999
+        int max = 999<
         if(Texto.iguales(deporte, "Futbol")) {
             return new EstadisticaFutbol(socio, partido, entrada.entero("Goles", 0, max), entrada.entero("Asistencias", 0, max), entrada.entero("Tarjetas amarillas", 0, 2),
-            entrada.entero("Tarjetas roas", 0, 1));
+            entrada.entero("Tarjetas rojas", 0, 1));
         }
         if(Texto.iguales(deporte, "Baloncesto")) {
             return new EstadisticaBaloncesto(socio, partido, entrada.entero("Puntos", 0, max), entrada.entero("Rebotes", 0, max));

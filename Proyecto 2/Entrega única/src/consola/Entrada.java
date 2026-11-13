@@ -1,4 +1,4 @@
-package console;
+package consola;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Entrada{
-    private final Scanner scaner;
+    private final Scanner scanner;
 
     public Entrada() {
         this.scanner = new Scanner(System.in);
@@ -20,7 +20,7 @@ public class Entrada{
             if (!linea.isEmpty()) {
                 return linea;
             }
-            System.out.println(" El valor no puede estar vacio. ");
+            System.out.println(" El valor no puede estar vacio.");
         }
     }
 
@@ -33,16 +33,32 @@ public class Entrada{
             String linea = linea(pregunta);
             try {
                 int valor = Integer.parseInt(linea);
-                if(valor >= minimo && valor <= meximo) {
-                    reutn valor;
+                if(valor >= minimo && valor <= maximo) {
+                    return valor;
                 }
-                System.out.println("Debe ser mayor o igual a" + minimo + ".");
+                System.out.println("Debe estar entre" + minimo + "y ", maximo+".");
 
-            } catch (NumberFOrmatException e) {
-                System.out.println(" Escriba un numero usando puntos para las decimales");
+            } catch (NumberFormatException e) {
+                System.out.println(" Escriba un numero");
             }
         }
     }
+
+    public double decimal(String pregunta, double minimo) {
+        while (true) {
+            String linea = linea(pregunta);
+            try {
+                double valor = Double.parseDouble(linea);
+                if (valor >= minimo) {
+                    return valor;
+                }
+                System.out.println("  Debe ser mayor o igual a " + minimo + ".");
+            } catch (NumberFormatException e) {
+                System.out.println("  Escriba un numero (use punto para los decimales).");
+            }
+        }
+    }
+    
     public LocalDate fecha(String pregunta) {
         while(true){
             try{
@@ -55,7 +71,7 @@ public class Entrada{
     public LocalTime hora(string pregunta){
         while(true){
             try{
-                return LocalTime.parse(linea(pregunta +"(HH:MM)"));
+                return LocalTime.parse(linea(pregunta +" (HH:MM)"));
             } catch (DateTimeParseException e) {
                 System.out.println(" Hora invalida. Ejemplo: 07:30");
             }
@@ -63,7 +79,7 @@ public class Entrada{
     }
     public boolean siNo(String pregunta) {
         while(true) {
-            String linea = linea(pregunta + "(s/n)").toLowerCase();
+            String linea = linea(pregunta + " (s/n)").toLowerCase();
             if (linea.equals("s") || linea.equals("si")) {
                 return true;
             }
@@ -75,18 +91,18 @@ public class Entrada{
     }
     public <T> T elegir(String titulo, List<T> opciones, Formato<T> formato) throws Exception {
         if (opciones.isEmpty()){
-            throws new Exception("No hay elementos para elegir");
+            throw new Exception("No hay elementos para elegir");
         }
         System.out.println(titulo);
         for ( int i = 0; i< opciones.size(); i++) {
             System.out.println(" "+(i+1)+". "+formato.mostrar(opciones.get(i)));
         }
-        return opciones.get(entero("opcion", 1, opciones.size()) -1);
+        return opciones.get(entero("Opcion", 1, opciones.size()) -1);
     }
     public String elegirTexto(String titulo, String... opciones) throws Exception {
         List<String> lista = new ArrayList<String>();
         for (String o : opciones) {
-            lista.ad(o);
+            lista.add(o);
         }
         return elegir(titulo, lista, o -> o);
     }
@@ -102,11 +118,11 @@ public class Entrada{
     private String linea(String pregunta) {
         System.out.print(pregunta + ": ");
         if (!scanner.hasNextLine()) {
-            throws new FinEntrada();
+            throw new FinEntrada();
         }
         return scanner.nextLine().trim();
     }
-    public interface Formate<T> {
+    public interface Formato<T> {
         String mostrar(T elemento);
     }
     public static class FinEntrada extends RuntimeException {

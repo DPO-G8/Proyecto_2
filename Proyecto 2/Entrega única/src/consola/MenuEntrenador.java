@@ -13,7 +13,7 @@ import logica.deportes.Estadistica;
 import logica.deportes.Partido;
 import logica.deportes.PartidoCompetencia;
 import logica.deportes.SesionEntrenamiento;
-import logica.torneos.PartidoTorneo;
+import logica.torneos.Encuentro;
 import logica.torneos.Torneo;
 import logica.usuarios.Entrenador;
 
@@ -165,27 +165,27 @@ public class MenuEntrenador {
                 .opcion("Inscribir mi equipo", () -> {
                     Equipo e = elegirEquipo();
                     Torneo t = VistaTorneos.elegir(club, entrenador, entrada);
-                    boolean pref = club.getGestorTorneos().inscribirEquipo(entrenador, t.getId(), e.getNombre())
+                    boolean pref = club.getGestorTorneos().inscribirEquipo(entrenador, t, e.getNombre())
                             .isPreferencial();
                     System.out.println("  Equipo inscrito con cupo " + (pref ? "preferencial" : "regular"));
                 })
                 .opcion("Retirar mi equipo", () -> {
                     Equipo e = elegirEquipo();
                     Torneo t = VistaTorneos.elegir(club, entrenador, entrada);
-                    club.getGestorTorneos().retirarEquipo(entrenador, t.getId(), e.getNombre());
+                    club.getGestorTorneos().retirarEquipo(entrenador, t, e.getNombre());
                     System.out.println("  Equipo retirado; el cupo queda libre.");
                 })
                 .opcion("Presentar alineacion para un encuentro", () -> {
                     Equipo e = elegirEquipo();
                     Torneo t = VistaTorneos.elegir(club, entrenador, entrada);
-                    List<PartidoTorneo> suyos = new ArrayList<PartidoTorneo>();
-                    for (PartidoTorneo p : t.getPartidos()) {
-                        if (!p.isJugado() && (p.getLocal().incluye(e.getNombre()) || p.getVisitante().incluye(e.getNombre()))) {
+                    List<Encuentro> suyos = new ArrayList<Encuentro>();
+                    for (Encuentro p : t.getEncuentrosPendientes()) {
+                        if ((p.getParticipanteA().incluye(e.getNombre()) || p.getParticipanteB().incluye(e.getNombre()))) {
                             suyos.add(p);
                         }
                     }
-                    PartidoTorneo p = entrada.elegir("Encuentros pendientes:", suyos, VistaTorneos::encuentro);
-                    club.getGestorTorneos().alinear(entrenador, t.getId(), p.getId(), e.getNombre(),
+                    Encuentro p = entrada.elegir("Encuentros pendientes:", suyos, VistaTorneos::encuentro);
+                    club.getGestorTorneos().alinear(entrenador, t, p, e.getNombre(),
                             entrada.lista("Logins de los jugadores"));
                     System.out.println("  Alineacion registrada.");
                 })

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controlador.Club;
+import controlador.GestorTorneos;
 import logica.deportes.DeporteConjunto;
 import logica.deportes.DisciplinaIndividual;
 import logica.deportes.Equipo;
@@ -20,8 +21,8 @@ import logica.tienda.Articulo;
 import logica.tienda.Producto;
 import logica.tienda.Sugerencia;
 import logica.tienda.Venta;
-import logica.torneos.ParticipanteExterno;
-import logica.torneos.PartidoTorneo;
+import logica.torneos.Encuentro;
+import logica.torneos.PersonaExterna;
 import logica.torneos.Torneo;
 import logica.torneos.TorneoIndividual;
 import logica.usuarios.Administrador;
@@ -36,47 +37,49 @@ public class MainAdministrador {
     private final Entrada entrada;
 
     public static void main(String[] args) {
-        Arranque.iniciar("Administrador",u->u instanceof Administrador, s->new MainAdministrador(s.getClub(),s.getUsuario(),s.getEntrada()).mostrar());
+        Arranque.iniciar("administrador", u -> u instanceof Administrador,
+                s -> new MainAdministrador(s.getClub(), s.getUsuario(), s.getEntrada()).mostrar());
+    }
 
+    public MainAdministrador(Club club, Usuario admin, Entrada entrada) {
+        this.club = club;
+        this.admin = admin;
+        this.entrada = entrada;
     }
-    public MainAdministrador(Club club,Usuario admin, Entrada entrada) {
-        this.club=club;
-        this.admin=admin;
-        this.entrada=entrada;
-    }
+
     public void mostrar() {
-        new Menu("Administrador",entrada)
-            .opcion("Torneos",this::menuTurneos)
-            .opcion("Tornos de empleados",this::menuTurnos)
-            .opcion("Inventario y sugerencias",this::menuInventario)
-            .opcion("Equipos y jugadores",this::menuEquipos)
-            .opcion("Ventas y reportes",this::menuReportes)
-            .opcion("Historiales (reservas, partidos, sesiones)",this::menuHistoriales)
-            .mostrar();
+        new Menu("Administrador", entrada)
+                .opcion("Torneos", this::menuTorneos)
+                .opcion("Turnos de empleados", this::menuTurnos)
+                .opcion("Inventario y sugerencias", this::menuInventario)
+                .opcion("Equipos y jugadores", this::menuEquipos)
+                .opcion("Ventas y reportes", this::menuReportes)
+                .opcion("Historiales (reservas, partidos, sesiones)", this::menuHistoriales)
+                .mostrar();
     }
-    
+
     private void menuTurnos() {
         new Menu("Turnos", entrada)
-            .opcion("Ver turnos de todos los empleados", this::verTurnos)
-            .opcion("Asignar turno", ()->{
-                tring login = entrada.texto("Login del empleado");
+                .opcion("Ver turnos de todos los empleados", this::verTurnos)
+                .opcion("Asignar turno", () -> {
+                    String login = entrada.texto("Login del empleado");
                     String dia = entrada.elegirTexto("Dia:", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes",
                             "Sabado", "Domingo");
                     club.getGestorTurnos().asignarTurno(admin, login, dia, entrada.hora("Hora de inicio"),
                             entrada.hora("Hora de fin"));
                     System.out.println("  Turno asignado.");
-            })
-            .opcion("Resolver solicitudes de cambio", () -> {
-                List<SolicitudCambioTurno> pendientes = club.getGestorTurnos().pendientes();
-                SolicitudCambioTurno s = entrada.elegir("Solicitudes pendientes:", pendientes,
-                        x -> x.getTurno().getDia() + " " + x.getTurno().getHoraInicio() + " -> "
-                                + x.getFechaSolicitada() + " " + x.getHoraInicio() + "-" + x.getHoraFin());
-                club.getGestorTurnos().resolver(admin, s, entrada.siNo("Aprobar"));
-                System.out.println("  Solicitud " + s.getEstado());
-            })
-            .mostrar();
+                })
+                .opcion("Resolver solicitudes de cambio", () -> {
+                    List<SolicitudCambioTurno> pendientes = club.getGestorTurnos().pendientes();
+                    SolicitudCambioTurno s = entrada.elegir("Solicitudes pendientes:", pendientes,
+                            x -> x.getTurno().getDia() + " " + x.getTurno().getHoraInicio() + " -> "
+                                    + x.getFechaSolicitada() + " " + x.getHoraInicio() + "-" + x.getHoraFin());
+                    club.getGestorTurnos().resolver(admin, s, entrada.siNo("Aprobar"));
+                    System.out.println("  Solicitud " + s.getEstado());
+                })
+                .mostrar();
     }
-    
+
     private void verTurnos() {
         for (Usuario u : club.getGestorUsuarios().getUsuarios().values()) {
             if (u instanceof Empleado) {
@@ -87,7 +90,8 @@ public class MainAdministrador {
             }
         }
     }
-    
+
+
     private void menuInventario() {
         new Menu("Inventario y sugerencias", entrada)
                 .opcion("Ver inventario", () -> {
@@ -126,7 +130,8 @@ public class MainAdministrador {
         }
         return entrada.elegir("Articulos:", articulos, MainSocio::producto);
     }
-    
+
+
     private void menuEquipos() {
         new Menu("Equipos y jugadores", entrada)
                 .opcion("Ver equipos", () -> {
@@ -189,7 +194,8 @@ public class MainAdministrador {
                 })
                 .mostrar();
     }
-    
+
+
     private void menuReportes() {
         new Menu("Ventas y reportes", entrada)
                 .opcion("Historial completo de ventas", () -> mostrarVentas(club.getGestorVentas().consultarVentas(admin)))
@@ -265,19 +271,17 @@ public class MainAdministrador {
     }
 
     private void crear() throws Exception {
-        String nombre = entrada.texto("Nombre del torneo");
         String clase = entrada.elegirTexto("Clase de torneo:", "Deporte de conjunto", "Disciplina individual");
         String deporte;
         String categoria;
         String modalidad = null;
         if (clase.startsWith("Deporte")) {
-            deporte = entrada.elegir("Deporte:", club.getGestorEquipos().getDeportes(), d -> d.getNombre()).getNombre();
+            deporte = entrada.elegirTexto("Deporte:", GestorTorneos.DEPORTES);
             categoria = entrada.elegirTexto("Categoria:", "Sub-13", "Sub-15", "Sub-17", "Mayores");
         } else {
-            deporte = entrada.elegir("Disciplina:", club.getGestorReservas().getDisciplinas(), d -> d.getNombre())
-                    .getNombre();
-            categoria = entrada.elegirTexto("Nivel:", "Principiante", "Intermedio", "Avanzado");
-            modalidad = entrada.elegirTexto("Modalidad:", "Sencillos", "Dobles");
+            deporte = entrada.elegirTexto("Disciplina:", GestorTorneos.DISCIPLINAS);
+            categoria = entrada.elegirTexto("Nivel:", GestorTorneos.NIVELES);
+            modalidad = entrada.elegirTexto("Modalidad:", Torneo.SENCILLOS, Torneo.DOBLES);
         }
         int cupos = entrada.entero("Numero de cupos", 1, 1000);
         String tipo = entrada.elegirTexto("Tipo:", Torneo.RECREATIVO, Torneo.COMPETITIVO);
@@ -285,65 +289,64 @@ public class MainAdministrador {
         if (tipo.equals(Torneo.COMPETITIVO)) {
             tarifa = entrada.decimal("Tarifa de inscripcion", 1);
         }
-        Torneo t = club.getGestorTorneos().crearTorneo(admin, nombre, deporte, categoria, cupos, tipo, modalidad,
+        Torneo t = club.getGestorTorneos().crearTorneo(admin, deporte, categoria, cupos, tipo, modalidad,
                 entrada.fecha("Fecha del torneo"), tarifa);
         System.out.println("  Torneo creado: " + VistaTorneos.resumen(t));
-        System.out.println("  Cupos: " + t.getCupos() + " (" + t.getCuposPreferenciales() + " preferenciales y "
+        System.out.println("  Cupos: " + t.getCuposTotales() + " (" + t.getCuposPreferenciales() + " preferenciales y "
                 + t.getCuposRegulares() + " regulares)");
     }
 
     private void inscribirExterno() throws Exception {
         Torneo t = VistaTorneos.elegir(club, admin, entrada);
         int cuantos = t instanceof TorneoIndividual && ((TorneoIndividual) t).esDobles() ? 2 : 1;
-        List<ParticipanteExterno> personas = new ArrayList<ParticipanteExterno>();
+        List<PersonaExterna> personas = new ArrayList<PersonaExterna>();
         for (int i = 1; i <= cuantos; i++) {
             if (cuantos == 2) {
                 System.out.println("Integrante " + i + " de la pareja:");
             }
             String nombre = entrada.texto("Nombre");
             String documento = entrada.texto("Documento");
-            String tipo = entrada.elegirTexto("Tipo:", ParticipanteExterno.ESTUDIANTE, ParticipanteExterno.EXTERNO);
+            String tipo = entrada.elegirTexto("Tipo:", PersonaExterna.ESTUDIANTE, PersonaExterna.EXTERNO);
             String codigo = "";
-            if (tipo.equals(ParticipanteExterno.ESTUDIANTE)) {
+            if (tipo.equals(PersonaExterna.ESTUDIANTE)) {
                 codigo = entrada.texto("Codigo estudiantil");
             }
-            personas.add(new ParticipanteExterno(nombre, documento, tipo, codigo));
+            personas.add(new PersonaExterna(nombre, documento, tipo, codigo));
         }
-        club.getGestorTorneos().inscribirExterno(admin, t.getId(), personas);
+        club.getGestorTorneos().inscribirExterno(admin, t, personas);
         System.out.println("  Inscrito. Cupos libres: " + t.cuposLibres());
     }
 
     private void retirarExterno() throws Exception {
         Torneo t = VistaTorneos.elegir(club, admin, entrada);
-        club.getGestorTorneos().retirarExterno(admin, t.getId(), entrada.texto("Documento del participante"));
+        club.getGestorTorneos().retirarExterno(admin, t, entrada.texto("Documento del participante"));
         System.out.println("  Retirado. Cupos libres: " + t.cuposLibres());
     }
 
     private void iniciar() throws Exception {
         Torneo t = VistaTorneos.elegir(club, admin, entrada);
-        club.getGestorTorneos().iniciarTorneo(admin, t.getId());
-        System.out.println("  Torneo en curso con " + t.getPartidos().size() + " encuentros:");
-        for (PartidoTorneo p : t.getPartidos()) {
+        club.getGestorTorneos().iniciar(admin, t);
+        System.out.println("  Torneo en curso con " + t.getEncuentros().size() + " encuentros:");
+        for (Encuentro p : t.getEncuentros()) {
             System.out.println("    " + VistaTorneos.encuentro(p));
         }
     }
 
     private void alinear() throws Exception {
         Torneo t = VistaTorneos.elegir(club, admin, entrada);
-        PartidoTorneo p = elegirPendiente(t);
-        String equipo = entrada.elegirTexto("Equipo:", p.getLocal().getNombre(), p.getVisitante().getNombre());
-        club.getGestorTorneos().alinear(admin, t.getId(), p.getId(), equipo, entrada.lista("Logins de los jugadores"));
+        Encuentro p = elegirPendiente(t);
+        String equipo = entrada.elegirTexto("Equipo:", p.getParticipanteA().getNombre(), p.getParticipanteB().getNombre());
+        club.getGestorTorneos().alinear(admin, t, p, equipo, entrada.lista("Logins de los jugadores"));
         System.out.println("  Alineacion registrada.");
     }
 
     private void registrarResultado() throws Exception {
         Torneo t = VistaTorneos.elegir(club, admin, entrada);
-        PartidoTorneo p = elegirPendiente(t);
+        Encuentro p = elegirPendiente(t);
         String unidad = t.esConjunto() && !t.getNombreDeporte().equalsIgnoreCase("Voleibol") ? "" : " (sets)";
-        int local = entrada.entero("Marcador de " + p.getLocal().getNombre() + unidad, 0, 999);
-        int visitante = entrada.entero("Marcador de " + p.getVisitante().getNombre() + unidad, 0, 999);
-        String escenario = entrada.texto("Escenario");
-        club.getGestorTorneos().registrarResultado(admin, t.getId(), p.getId(), local, visitante, escenario,
+        int marcadorA = entrada.entero("Marcador de " + p.getParticipanteA().getNombre() + unidad, 0, 999);
+        int marcadorB = entrada.entero("Marcador de " + p.getParticipanteB().getNombre() + unidad, 0, 999);
+        club.getGestorTorneos().registrarResultado(admin, t, p, marcadorA, marcadorB,
                 FormularioEstadisticas.pedir(entrada, club.getGestorUsuarios().getUsuarios(), p,
                         t.getNombreDeporte()));
         System.out.println("  Resultado registrado: " + VistaTorneos.encuentro(p));
@@ -351,26 +354,21 @@ public class MainAdministrador {
 
     private void walkover() throws Exception {
         Torneo t = VistaTorneos.elegir(club, admin, entrada);
-        PartidoTorneo p = elegirPendiente(t);
-        String ausente = entrada.elegirTexto("Equipo que no completa el minimo:", p.getLocal().getNombre(),
-                p.getVisitante().getNombre());
-        club.getGestorTorneos().registrarWalkover(admin, t.getId(), p.getId(), ausente);
+        Encuentro p = elegirPendiente(t);
+        String ausente = entrada.elegirTexto("Equipo que no completa el minimo:", p.getParticipanteA().getNombre(),
+                p.getParticipanteB().getNombre());
+        club.getGestorTorneos().registrarWalkover(admin, t, p, ausente);
         System.out.println("  Walkover registrado: " + VistaTorneos.encuentro(p));
     }
 
     private void finalizar() throws Exception {
         Torneo t = VistaTorneos.elegir(club, admin, entrada);
-        club.getGestorTorneos().finalizarTorneo(admin, t.getId());
+        club.getGestorTorneos().finalizar(admin, t);
         System.out.println("  Torneo finalizado.");
     }
 
-    private PartidoTorneo elegirPendiente(Torneo t) throws Exception {
-        List<PartidoTorneo> pendientes = new ArrayList<PartidoTorneo>();
-        for (PartidoTorneo p : t.getPartidos()) {
-            if (!p.isJugado()) {
-                pendientes.add(p);
-            }
-        }
+    private Encuentro elegirPendiente(Torneo t) throws Exception {
+        List<Encuentro> pendientes = t.getEncuentrosPendientes();
         if (pendientes.isEmpty()) {
             throw new Exception("El torneo no tiene encuentros pendientes (esta " + t.getEstadoTexto() + ")");
         }
