@@ -52,7 +52,7 @@ public class SalirTorneoTest {
 	}
 	//En dobles si un integrante se retira del torneo se retira toda la pareja
 	@Test
-	public void hu_soc05_ca2_testSalirDeTorneoDobles() throws Exception{
+	public void hu_soc05_ca3_testSalirDeTorneoDobles() throws Exception{
 		Torneo torneo = gestor.crearTorneo(admin, "Padel", "Intermedio", 12, Torneo.RECREATIVO, Torneo.DOBLES, LocalDate.now().plusDays(7), 0);
 		gestor.inscribirJugador(ana, torneo, "luis");
 		gestor.salirDeTorneo(luis,torneo);
