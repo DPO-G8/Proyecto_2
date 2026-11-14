@@ -5,6 +5,7 @@ import logica.usuarios.Empleado;
 import logica.usuarios.Socio;
 import logica.usuarios.Usuario;
 import logica.usuarios.Bono;
+import logica.usuarios.Administrador;
 import persistencia.RepositorioDatos;
 public class GestorUsuarios {
 	private final RepositorioDatos repositorio;
