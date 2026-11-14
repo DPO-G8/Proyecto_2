@@ -880,6 +880,8 @@ public class RepositorioJSON implements RepositorioDatos {
 	                jp.put("preferencial", i.isPreferencial());
 	                jp.put("tarifaPagada", i.getTarifaPagada());
 	                jp.put("puntos", i.getPuntos());
+	                jp.put("aFavor", i.getAFavor());
+	                jp.put("enContra", i.getEnContra());
 	                jp.put("premio", i.getPremio());
 	                participantes.put(jp);
 	            }
@@ -944,6 +946,7 @@ public class RepositorioJSON implements RepositorioDatos {
 	                            tarifaPagada);
 	                }
 	                i.sumarPuntos(jp.getInt("puntos"));
+	                i.sumarMarcador(jp.optInt("aFavor"), jp.optInt("enContra"));
 	                i.setPremio(jp.getDouble("premio"));
 	                t.agregarParticipante(i);
 	            }

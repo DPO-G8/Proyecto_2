@@ -209,7 +209,10 @@ public abstract class Torneo {
 		List<InscripcionTorneo> tabla = new ArrayList<InscripcionTorneo>(participantes);
 		Collections.sort(tabla, new Comparator<InscripcionTorneo>() {
 			public int compare(InscripcionTorneo x, InscripcionTorneo y) {
-				return y.getPuntos() - x.getPuntos();
+				if (y.getPuntos() != x.getPuntos()) {
+					return y.getPuntos() - x.getPuntos();
+				}
+				return y.getDiferencia() - x.getDiferencia();
 			}
 		});
 		return tabla;

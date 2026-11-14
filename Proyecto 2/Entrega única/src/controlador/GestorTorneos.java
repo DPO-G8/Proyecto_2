@@ -321,6 +321,8 @@ public class GestorTorneos {
 			rankingPerdedor = rankingDe(perdedor, t);
 		}
 		e.registrarResultado(marcadorA, marcadorB);
+		e.getParticipanteA().sumarMarcador(marcadorA, marcadorB);
+		e.getParticipanteB().sumarMarcador(marcadorB, marcadorA);
 		if (marcadorA == marcadorB) {
 			e.getParticipanteA().sumarPuntos(PUNTOS_EMPATE);
 			e.getParticipanteB().sumarPuntos(PUNTOS_EMPATE);

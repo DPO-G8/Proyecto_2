@@ -16,6 +16,8 @@ public class InscripcionTorneo {
 	private boolean preferencial;
 	private double tarifaPagada;
 	private int puntos;
+	private int aFavor;
+	private int enContra;
 	private double premio;
 
 	public InscripcionTorneo(Socio socio, Socio pareja, boolean preferencial, double tarifaPagada) {
@@ -126,6 +128,23 @@ public class InscripcionTorneo {
 
 	public void sumarPuntos(int puntos) {
 		this.puntos += puntos;
+	}
+
+	public int getAFavor() {
+		return aFavor;
+	}
+
+	public int getEnContra() {
+		return enContra;
+	}
+
+	public int getDiferencia() {
+		return aFavor - enContra;
+	}
+
+	public void sumarMarcador(int aFavor, int enContra) {
+		this.aFavor += aFavor;
+		this.enContra += enContra;
 	}
 
 	public double getPremio() {
