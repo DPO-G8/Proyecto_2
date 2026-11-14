@@ -64,6 +64,17 @@ public class GestorUsuarios {
         repositorio.guardarUsuarios(usuarios.values());
     }
 
+    public Socio consultarInformacion(Usuario quien, Socio socio) throws Exception {
+        if (quien instanceof Administrador) {
+            return socio;
+        }
+        if (quien instanceof Socio && quien.getLogin().equals(socio.getLogin())) {
+            return socio;
+        }
+        throw new Exception("Un socio solo puede consultar su propia informacion");
+    }
+
+
     // RF2 Socio
     public String estadoDe(Socio socio) {
         if (socio.estaSuspendido()) {
